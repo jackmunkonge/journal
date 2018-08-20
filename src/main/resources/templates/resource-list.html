@@ -1,4 +1,4 @@
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <title>Resources</title>
@@ -7,6 +7,25 @@
 <body>
 
 <p>My resources template</p>
+
+<div th:if="${resources != null}">
+    <table th:object="${resources}" id="resourceTable" class="table">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Title</th>
+            <th scope="col">URL</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="resource :${resources}">
+            <td th:text="${resource.getResourceId()}"></td>
+            <td th:text="${resource.getName()}"></td>
+            <td> <a th:href="${resource.getUrl()}" target="_blank"> Link </a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 

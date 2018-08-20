@@ -1,0 +1,135 @@
+databaseChangeLog:
+- changeSet:
+    id: 1533819353307-1
+    author: Jack (generated)
+    changes:
+    - createSequence:
+        sequenceName: hibernate_sequence
+- changeSet:
+    id: 1533819353307-2
+    author: Jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: frameworkPK
+            name: framework_id
+            type: INT
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: language_id
+            type: INT
+        tableName: framework
+- changeSet:
+    id: 1533819353307-3
+    author: Jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: languagePK
+            name: language_id
+            type: INT
+        - column:
+            name: name
+            type: VARCHAR(255)
+        tableName: language
+- changeSet:
+    id: 1533819353307-4
+    author: Jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: resourcePK
+            name: resource_id
+            type: INT
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: url
+            type: VARCHAR(255)
+        - column:
+            name: framework_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: language_id
+            type: INT
+        tableName: resource
+- changeSet:
+    id: 1533819353307-5
+    author: Jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_FRAMEWORKNAME_COL
+        tableName: framework
+- changeSet:
+    id: 1533819353307-6
+    author: Jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_LANGUAGENAME_COL
+        tableName: language
+- changeSet:
+    id: 1533819353307-7
+    author: Jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_RESOURCENAME_COL
+        tableName: resource
+- changeSet:
+    id: 1533819353307-8
+    author: Jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: language_id
+        baseTableName: resource
+        constraintName: FKn5rk2dgjvp3tniv836sddp817
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: language_id
+        referencedTableName: language
+- changeSet:
+    id: 1533819353307-9
+    author: Jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: language_id
+        baseTableName: framework
+        constraintName: FKnlptjd449numforhn9lg9w4gv
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: language_id
+        referencedTableName: language
+- changeSet:
+    id: 1533819353307-10
+    author: Jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: framework_id
+        baseTableName: resource
+        constraintName: FKqb60gqvc2ch0548bqj6ojh9q1
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: framework_id
+        referencedTableName: framework
+
