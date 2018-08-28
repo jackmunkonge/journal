@@ -70,12 +70,12 @@ public class ResourceControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(resourceController).build();
 
         Resource testResource = new Resource();
-        testResource.setName("testResource");
+        testResource.setName("aResource");
         testResource.setUrl("http://testResource.com");
         testResource.setResourceId(1);
 
         Resource testResource2 = new Resource();
-        testResource2.setName("testResource2");
+        testResource2.setName("aResource2");
         testResource2.setUrl("http://testResource.com");
         testResource2.setResourceId(2);
 
@@ -98,9 +98,9 @@ public class ResourceControllerTest {
                             .andReturn();
         List<Resource> listres = MAPPER.readValue(result.getResponse().getContentAsString(),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Resource.class));
-        assertTrue(listres.size() == testResources.size());
-        assertEquals(listres.get(0).getName(),"testResource");
-        assertEquals(listres.get(1).getName(),"testResource2");
+        assertEquals(listres.size(), testResources.size());
+        assertEquals(listres.get(0).getName(),"aResource");
+        assertEquals(listres.get(1).getName(),"aResource2");
     }
 
     @Test
@@ -114,18 +114,18 @@ public class ResourceControllerTest {
     @Test
     public void testGetResourceByNameReturns200Response() throws Exception {
         given(resourceService.getResource(anyString())).willReturn(Optional.ofNullable(testResources.get(0)));
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT + "/testResource"))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT + "/aResource"))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
         String foundRes = mvcResult.getResponse().getContentAsString();
         Resource retrievedRes = JsonUtil.toObjectFromJson(foundRes, Resource.class);
-        assertEquals(retrievedRes.getName(),"testResource");
+        assertEquals(retrievedRes.getName(),"aResource");
     }
 
     @Test
     public void testGetResourceByNameReturnsNotFoundResponseIfNoResourceFound() throws Exception {
         given(resourceService.getResource(anyString())).willReturn(Optional.empty());
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT + "/testResource"))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT + "/aResource"))
                 .andExpect(status().is4xxClientError())
                 .andReturn();
     }
@@ -195,7 +195,17 @@ public class ResourceControllerTest {
 
     @Test
     public void testPostResourceReturns200Response() throws Exception {
+        given(resourceService.getResource(anyString())).willReturn(Optional.empty());
         String postJson = JsonUtil.getJsonInput("test_resource");
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(ENDPOINT).content(postJson).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+    }
+
+    @Test
+    public void testPostResourceReturns200ResponseIfNoLanguageOrFramework() throws Exception {
+        given(resourceService.getResource(anyString())).willReturn(Optional.empty());
+        String postJson = JsonUtil.getJsonInput("test_resource_nulls");
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(ENDPOINT).content(postJson).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
@@ -215,6 +225,16 @@ public class ResourceControllerTest {
     public void testPostResourceReturnsNotFoundResponseDueToLanguage() throws Exception {
         given(languageService.getLanguage(anyString())).willReturn(Optional.empty());
         String postJson = JsonUtil.getJsonInput("test_resource");
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(ENDPOINT).content(postJson).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+    }
+
+    @Test
+    public void testPostResourceReturnsBadRequestResponseDueToAlreadyExists() throws Exception{
+        given(resourceService.getResource(anyString())).willReturn(Optional.ofNullable(testResources.get(0)));
+        String postJson = JsonUtil.getJsonInput("test_resource_nulls");
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(ENDPOINT).content(postJson).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError())

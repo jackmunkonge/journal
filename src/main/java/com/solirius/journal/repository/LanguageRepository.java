@@ -17,4 +17,8 @@ public interface LanguageRepository extends CrudRepository<Language, Integer> {
     Optional<Language> findByName(String languageName);
 
     List<Language> findAllByName(String name);
+
+    List<Language> findAllByOrderByLanguageIdAsc();
+
+    List<Language> findAllByNameOrderByLanguageIdAsc(String name);
 }

@@ -124,19 +124,30 @@ public class ResourceController {
     @PostMapping
     public ResponseEntity postResource(@RequestBody ResourceCreateRequest request){
         Resource savedResource = new Resource();
+
+        if(resourceService.getResource(request.getName()).isPresent()){
+            return new ResponseEntity("Resource already exists",HttpStatus.BAD_REQUEST);
+        }
+
         savedResource.setName(request.getName());
         savedResource.setUrl(request.getUrl());
 
-        Optional<Framework> frame = frameworkService.getFramework(request.getFrameworkName());
-        if(!frame.isPresent()){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        if(request.getFrameworkName() != null && !request.getFrameworkName().isEmpty()){
+            Optional<Framework> frame = frameworkService.getFramework(request.getFrameworkName());
+            if(!frame.isPresent()){
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            savedResource.setFramework(frame.get());
         }
-        savedResource.setFramework(frame.get());
-        Optional<Language> lang = languageService.getLanguage(request.getLanguageName());
-        if(!lang.isPresent()){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        if(request.getLanguageName() != null && !request.getLanguageName().isEmpty()){
+            Optional<Language> lang = languageService.getLanguage(request.getLanguageName());
+            if(!lang.isPresent()){
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            savedResource.setLanguage(lang.get());
         }
-        savedResource.setLanguage(lang.get());
+
         Resource resource = resourceService.createResource(savedResource);
 
         return new ResponseEntity(resource,HttpStatus.ACCEPTED);
@@ -169,12 +180,16 @@ public class ResourceController {
             Language newLanguage = languageService.getLanguage(resource.getLanguageName())
                     .orElseThrow(()-> new EntityNotFoundException());
             newres.setLanguage(newLanguage);
+        } else {
+            newres.setLanguage(null);
         }
 
         if(resource.getFrameworkName() != null){
             Framework newFramework = frameworkService.getFramework(resource.getFrameworkName())
                     .orElseThrow(()-> new EntityNotFoundException());
             newres.setFramework(newFramework);
+        } else {
+            newres.setFramework(null);
         }
 
         Resource returned = resourceService.createResource(newres);

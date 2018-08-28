@@ -7,11 +7,9 @@ import javax.validation.constraints.NotNull;
 
 public class ResourceCreateRequest {
     @JsonProperty("frameworkName")
-    @NotNull(message = "Name must be defined")
     private String frameworkName;
 
     @JsonProperty("languageName")
-    @NotNull(message = "Name must be defined")
     private String languageName;
 
     @JsonProperty("name")

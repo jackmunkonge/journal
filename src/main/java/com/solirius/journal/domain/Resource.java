@@ -1,5 +1,7 @@
 package com.solirius.journal.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 
 @Entity
@@ -17,12 +19,14 @@ public class Resource {
     @Column(name = "url")
     private String url;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @ManyToOne
     @JoinColumn(name="framework_id", nullable=true)
     private Framework framework;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @ManyToOne
-    @JoinColumn(name="language_id", nullable=false)
+    @JoinColumn(name="language_id", nullable=true)
     private Language language;
 
     public String getName() {

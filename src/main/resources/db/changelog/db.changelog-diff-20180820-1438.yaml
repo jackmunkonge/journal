@@ -1,0 +1,10 @@
+databaseChangeLog:
+- changeSet:
+    id: 1534772343790-1
+    author: jack (generated)
+    changes:
+    - dropNotNullConstraint:
+        columnDataType: int
+        columnName: language_id
+        tableName: resource
+

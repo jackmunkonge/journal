@@ -48,11 +48,11 @@ public class LanguageServiceTest {
 
         testLanguages = Arrays.asList(testLanguage,testLanguage2);
 
-        given(languageRepository.findAll()).willReturn(testLanguages);
+        given(languageRepository.findAllByOrderByLanguageIdAsc()).willReturn(testLanguages);
         given(languageRepository.findByName(anyString())).willReturn(Optional.ofNullable(testLanguage));
         given(languageRepository.findById(anyInt())).willReturn(Optional.ofNullable(testLanguage));
         given(languageRepository.save(any(Language.class))).willReturn(testLanguage);
-        given(languageRepository.findAllByName(anyString())).willReturn(testLanguages);
+        given(languageRepository.findAllByNameOrderByLanguageIdAsc(anyString())).willReturn(testLanguages);
     }
 
     @Test

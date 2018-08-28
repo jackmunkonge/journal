@@ -49,10 +49,10 @@ public class ResourceServiceTest {
         testResource.setResourceId(1);
         testResources = Arrays.asList(testResource);
         
-        given(resourceRepository.findAll()).willReturn(testResources);
-        given(resourceRepository.findAllByName(anyString())).willReturn(testResources);
-        given(resourceRepository.findAllByFramework(any(Framework.class))).willReturn(testResources);
-        given(resourceRepository.findAllByLanguage(any(Language.class))).willReturn(testResources);
+        given(resourceRepository.findAllByOrderByResourceIdAsc()).willReturn(testResources);
+        given(resourceRepository.findAllByNameOrderByResourceIdAsc(anyString())).willReturn(testResources);
+        given(resourceRepository.findAllByFrameworkOrderByResourceIdAsc(any(Framework.class))).willReturn(testResources);
+        given(resourceRepository.findAllByLanguageOrderByResourceIdAsc(any(Language.class))).willReturn(testResources);
         given(resourceRepository.findById(anyInt())).willReturn(Optional.ofNullable(testResource));
         given(resourceRepository.findByName(anyString())).willReturn(Optional.ofNullable(testResource));
         given(frameworkRepository.findByName(anyString())).willReturn(Optional.ofNullable(new Framework()));

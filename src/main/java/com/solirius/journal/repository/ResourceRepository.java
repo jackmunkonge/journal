@@ -3,6 +3,7 @@ package com.solirius.journal.repository;
 import com.solirius.journal.domain.Framework;
 import com.solirius.journal.domain.Language;
 import com.solirius.journal.domain.Resource;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -24,4 +25,11 @@ public interface ResourceRepository extends CrudRepository<Resource, Integer> {
 
     Optional<Resource> findByName(String name);
 
+    List<Resource> findAllByOrderByResourceIdAsc();
+
+    List<Resource> findAllByNameOrderByResourceIdAsc(String name);
+
+    List<Resource> findAllByFrameworkOrderByResourceIdAsc(Framework framework);
+
+    List<Resource> findAllByLanguageOrderByResourceIdAsc(Language language);
 }

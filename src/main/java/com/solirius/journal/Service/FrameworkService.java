@@ -28,15 +28,15 @@ public class FrameworkService {
     }
 
     public List<Framework> getAllFrameworks() {
-        return frameworkRepository.findAll();
+        return frameworkRepository.findAllByOrderByFrameworkIdAsc();
     }
 
     public List<Framework> getAllFrameworks(String name) {
-        return frameworkRepository.findAllByName(name);
+        return frameworkRepository.findAllByNameOrderByFrameworkIdAsc(name);
     }
 
     public List<Framework> getAllFrameworks(Language language){
-        return frameworkRepository.findAllByLanguage(language);
+        return frameworkRepository.findAllByLanguageOrderByFrameworkIdAsc(language);
     }
 
     public Framework createFramework(Framework framework) {

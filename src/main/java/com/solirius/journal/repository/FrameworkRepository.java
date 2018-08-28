@@ -19,4 +19,10 @@ public interface FrameworkRepository extends CrudRepository<Framework, Integer> 
     List<Framework> findAllByName(String name);
 
     List<Framework> findAllByLanguage(Language language);
+
+    List<Framework> findAllByOrderByFrameworkIdAsc();
+
+    List<Framework> findAllByNameOrderByFrameworkIdAsc(String name);
+
+    List<Framework> findAllByLanguageOrderByFrameworkIdAsc(Language language);
 }

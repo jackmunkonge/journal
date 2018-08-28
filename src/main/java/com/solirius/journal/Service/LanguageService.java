@@ -27,11 +27,11 @@ public class LanguageService {
     }
 
     public List<Language> getAllLanguages(){
-        return languageRepository.findAll();
+        return languageRepository.findAllByOrderByLanguageIdAsc();
     }
 
     public List<Language> getAllLanguages(String name){
-        return languageRepository.findAllByName(name);
+        return languageRepository.findAllByNameOrderByLanguageIdAsc(name);
     }
 
     public Language createLanguage(Language language){

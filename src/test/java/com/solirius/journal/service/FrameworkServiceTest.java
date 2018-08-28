@@ -59,12 +59,12 @@ public class FrameworkServiceTest {
 
         testFrameworks = Arrays.asList(testFramework,testFramework2);
 
-        given(frameworkRepository.findAll()).willReturn(testFrameworks);
+        given(frameworkRepository.findAllByOrderByFrameworkIdAsc()).willReturn(testFrameworks);
         given(frameworkRepository.findByName(anyString())).willReturn(Optional.ofNullable(testFramework));
         given(frameworkRepository.findById(anyInt())).willReturn(Optional.ofNullable(testFramework));
         given(frameworkRepository.save(any(Framework.class))).willReturn(testFramework);
         given(languageRepository.findByName(anyString())).willReturn(Optional.ofNullable(testLanguage));
-        given(frameworkRepository.findAllByLanguage(any(Language.class))).willReturn(testFrameworks);
+        given(frameworkRepository.findAllByLanguageOrderByFrameworkIdAsc(any(Language.class))).willReturn(testFrameworks);
     }
 
     @Test

@@ -122,6 +122,8 @@ public class FrameworkController {
             Language newLanguage = languageService.getLanguage(frameworkReq.getLanguageName())
                     .orElseThrow(()-> new EntityNotFoundException());
             newFrame.setLanguage(newLanguage);
+        } else {
+            newFrame.setLanguage(null);
         }
 
         Framework returned = frameworkService.createFramework(newFrame);

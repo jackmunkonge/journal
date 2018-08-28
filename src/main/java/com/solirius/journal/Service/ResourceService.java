@@ -28,19 +28,19 @@ public class ResourceService {
     }
 
     public List<Resource> getAllResources() {
-        return resourceRepository.findAll();
+        return resourceRepository.findAllByOrderByResourceIdAsc();
     }
 
     public List<Resource> getAllResources(String name) {
-        return resourceRepository.findAllByName(name);
+        return resourceRepository.findAllByNameOrderByResourceIdAsc(name);
     }
 
     public List<Resource> getAllResources(Framework framework) {
-        return resourceRepository.findAllByFramework(framework);
+        return resourceRepository.findAllByFrameworkOrderByResourceIdAsc(framework);
     }
 
     public List<Resource> getAllResources(Language language) {
-        return resourceRepository.findAllByLanguage(language);
+        return resourceRepository.findAllByLanguageOrderByResourceIdAsc(language);
     }
 
     public Resource createResource(Resource resource) {
