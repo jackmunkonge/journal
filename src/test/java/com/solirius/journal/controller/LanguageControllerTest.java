@@ -148,6 +148,14 @@ public class LanguageControllerTest {
     }
 
     @Test
+    public void testPostLanguageReturnsNotFoundResponseIfNoNameFound() throws Exception{
+        String postJson = JsonUtil.getJsonInput("test_empty");
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(ENDPOINT).content(postJson).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+    }
+
+    @Test
     public void testUpdateLanguageByNameReturns200Response() throws Exception{
         String putJson = JsonUtil.getJsonInput("test_putlanguage");
 
@@ -187,6 +195,14 @@ public class LanguageControllerTest {
 
         MvcResult testing = mockMvc.perform(MockMvcRequestBuilders.put(ENDPOINT + "/" + 10)
                 .content(putJson).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateLanguageReturns200ResponseIfNoNameFound() throws Exception{
+        String postJson = JsonUtil.getJsonInput("test_empty");
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put(ENDPOINT).content(postJson).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError())
                 .andReturn();
     }
