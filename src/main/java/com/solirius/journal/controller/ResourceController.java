@@ -32,26 +32,24 @@ public class ResourceController {
     private LanguageService languageService;
 
     // GETs resource
-    @GetMapping(value = "{resource}")
-    public ResponseEntity getResource(@PathVariable String resource){
-        Optional<Resource> testResource;
+    @GetMapping(value = "{resourcePath}")
+    public ResponseEntity getResource(@PathVariable String resourcePath){
+        Optional<Resource> fetchedResource;
         try{
-            int resourceId = Integer.parseInt(resource);
-            testResource = resourceService.getResource(resourceId);
-            if(!testResource.isPresent()){
-                System.out.println("Resource not present.");
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            } else {
-                return new ResponseEntity(testResource.get(),HttpStatus.ACCEPTED);
+            int resourceId = Integer.parseInt(resourcePath);
+            fetchedResource = resourceService.getResource(resourceId);
+            if(!fetchedResource.isPresent()){
+                return new ResponseEntity<>(new Message("Resource with ID '" + resourceId + "' does not exist"),HttpStatus.NOT_FOUND);
             }
+            return new ResponseEntity<>(fetchedResource.get(),HttpStatus.ACCEPTED);
+
         } catch(NumberFormatException nfe){
-            testResource = resourceService.getResource(resource);
-            if(!testResource.isPresent()){
-                System.out.println("Resource not present.");
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            } else {
-                return new ResponseEntity(testResource.get(),HttpStatus.ACCEPTED);
+            fetchedResource = resourceService.getResource(resourcePath);
+            if(!fetchedResource.isPresent()){
+                return new ResponseEntity<>(new Message("Resource with name '" + resourcePath + "' does not exist"),HttpStatus.NOT_FOUND);
             }
+            return new ResponseEntity<>(fetchedResource.get(),HttpStatus.ACCEPTED);
+
         }
     }
 
@@ -60,12 +58,12 @@ public class ResourceController {
     public ResponseEntity getResources(Model model) {
         List<Resource> resources = resourceService.getAllResources();
         if(resources.isEmpty()){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new Message("Cannot get resource list, resource list is empty"),HttpStatus.NOT_FOUND);
         }
 
         model.addAttribute("resources", resources);
 
-        return new ResponseEntity(resources,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(resources,HttpStatus.ACCEPTED);
     }
 
     // GETs resource list by language
@@ -76,20 +74,19 @@ public class ResourceController {
             int languageId = Integer.parseInt(languagePath);
             reqLanguage = languageService.getLanguage(languageId);
             if(!reqLanguage.isPresent()){
-                System.out.println("Language not present.");
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new Message("Resources by language ID '" + languageId + "' do not exist"),HttpStatus.NOT_FOUND);
             } else {
                 List<Resource> langResources = resourceService.getAllResources(reqLanguage.get());
-                return new ResponseEntity(langResources,HttpStatus.ACCEPTED);
+                return new ResponseEntity<>(langResources,HttpStatus.ACCEPTED);
             }
         } catch(NumberFormatException nfe){
             reqLanguage = languageService.getLanguage(languagePath);
             if(!reqLanguage.isPresent()){
                 System.out.println("Language not present.");
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new Message("Resources by language name '" + languagePath + "' do not exist"),HttpStatus.NOT_FOUND);
             } else {
                 List<Resource> langResources = resourceService.getAllResources(reqLanguage.get());
-                return new ResponseEntity(langResources,HttpStatus.ACCEPTED);
+                return new ResponseEntity<>(langResources,HttpStatus.ACCEPTED);
             }
         }
     }
@@ -102,20 +99,18 @@ public class ResourceController {
             int frameworkId = Integer.parseInt(frameworkPath);
             reqFramework = frameworkService.getFramework(frameworkId);
             if(!reqFramework.isPresent()){
-                System.out.println("Framework not present.");
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new Message("Resources by framework ID '" + frameworkId + "' do not exist"),HttpStatus.NOT_FOUND);
             } else {
                 List<Resource> frameResources = resourceService.getAllResources(reqFramework.get());
-                return new ResponseEntity(frameResources,HttpStatus.ACCEPTED);
+                return new ResponseEntity<>(frameResources,HttpStatus.ACCEPTED);
             }
         } catch(NumberFormatException nfe){
             reqFramework = frameworkService.getFramework(frameworkPath);
             if(!reqFramework.isPresent()){
-                System.out.println("Framework not present.");
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new Message("Resources by language name '" + frameworkPath + "' do not exist"),HttpStatus.NOT_FOUND);
             } else {
                 List<Resource> frameResources = resourceService.getAllResources(reqFramework.get());
-                return new ResponseEntity(frameResources,HttpStatus.ACCEPTED);
+                return new ResponseEntity<>(frameResources,HttpStatus.ACCEPTED);
             }
         }
     }
@@ -126,7 +121,7 @@ public class ResourceController {
         Resource savedResource = new Resource();
 
         if(resourceService.getResource(request.getName()).isPresent()){
-            return new ResponseEntity("Resource already exists",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message("Cannot create, a resource with name '" + request.getName() + "' already exists"),HttpStatus.BAD_REQUEST);
         }
 
         savedResource.setName(request.getName());
@@ -135,7 +130,7 @@ public class ResourceController {
         if(request.getFrameworkName() != null && !request.getFrameworkName().isEmpty()){
             Optional<Framework> frame = frameworkService.getFramework(request.getFrameworkName());
             if(!frame.isPresent()){
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new Message("Cannot create resource, framework with name '" + request.getFrameworkName() + "' does not exist"),HttpStatus.BAD_REQUEST);
             }
             savedResource.setFramework(frame.get());
         }
@@ -143,14 +138,14 @@ public class ResourceController {
         if(request.getLanguageName() != null && !request.getLanguageName().isEmpty()){
             Optional<Language> lang = languageService.getLanguage(request.getLanguageName());
             if(!lang.isPresent()){
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new Message("Cannot create resource, language with name '" + request.getLanguageName() + "' does not exist"),HttpStatus.BAD_REQUEST);
             }
             savedResource.setLanguage(lang.get());
         }
 
         Resource resource = resourceService.createResource(savedResource);
 
-        return new ResponseEntity(resource,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(resource,HttpStatus.ACCEPTED);
     }
 
     // Updates resource
@@ -164,8 +159,7 @@ public class ResourceController {
             resToUpdate = resourceService.getResource(resourcePath);
         }
         if(!resToUpdate.isPresent()){
-            System.out.println("Resource not present.");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new Message("Cannot update, resource '" + resourcePath + "' does not exist"),HttpStatus.NOT_FOUND);
         }
 
 
@@ -177,23 +171,29 @@ public class ResourceController {
             newres.setUrl(resource.getUrl());
         }
         if(resource.getLanguageName() != null){
-            Language newLanguage = languageService.getLanguage(resource.getLanguageName())
-                    .orElseThrow(()-> new EntityNotFoundException());
-            newres.setLanguage(newLanguage);
+            Optional<Language> newLanguage = languageService.getLanguage(resource.getLanguageName());
+            if(!newLanguage.isPresent()){
+                return new ResponseEntity<>(new Message("Cannot update, language by name '" + resource.getLanguageName() + "' does not exist"),HttpStatus.NOT_FOUND);
+            } else {
+                newres.setLanguage(newLanguage.get());
+            }
         } else {
             newres.setLanguage(null);
         }
 
         if(resource.getFrameworkName() != null){
-            Framework newFramework = frameworkService.getFramework(resource.getFrameworkName())
-                    .orElseThrow(()-> new EntityNotFoundException());
-            newres.setFramework(newFramework);
+            Optional<Framework> newFramework = frameworkService.getFramework(resource.getFrameworkName());
+            if(!newFramework.isPresent()){
+                return new ResponseEntity<>(new Message("Cannot update, framework by name '" + resource.getFrameworkName() + "' does not exist"),HttpStatus.NOT_FOUND);
+            } else {
+                newres.setFramework(newFramework.get());
+            }
         } else {
             newres.setFramework(null);
         }
 
         Resource returned = resourceService.createResource(newres);
-        return new ResponseEntity(returned,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(returned,HttpStatus.ACCEPTED);
 
     }
 
@@ -209,13 +209,12 @@ public class ResourceController {
             testResource = resourceService.getResource(resourcePath);
         }
         if(!testResource.isPresent()){
-            System.out.println("Resource not present.");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new Message("Resource '" + resourcePath + "' does not exist"),HttpStatus.NOT_FOUND);
         }
 
         Resource toDelete = testResource.get();
         toDelete = resourceService.destroyResource(toDelete);
-        return new ResponseEntity(toDelete,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(toDelete,HttpStatus.ACCEPTED);
     }
 
 }

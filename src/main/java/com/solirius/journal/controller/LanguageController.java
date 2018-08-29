@@ -24,24 +24,22 @@ public class LanguageController {
 
     // GETs language
     @GetMapping(value = "{languagePath}")
-    public ResponseEntity getLanguage(@PathVariable String languagePath){
+    public ResponseEntity getSpecificLanguage(@PathVariable String languagePath){
         Optional<Language> fetchedLanguage;
         try{
             int languageId = Integer.parseInt(languagePath);
             fetchedLanguage = languageService.getLanguage(languageId);
             if(!fetchedLanguage.isPresent()){
-                System.out.println("Language not present.");
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new Message("Language with ID '" + languageId + "' does not exist"),HttpStatus.NOT_FOUND);
             }
-                return new ResponseEntity(fetchedLanguage.get(),HttpStatus.ACCEPTED);
+                return new ResponseEntity<>(fetchedLanguage.get(),HttpStatus.ACCEPTED);
 
         } catch(NumberFormatException nfe){
             fetchedLanguage = languageService.getLanguage(languagePath);
             if(!fetchedLanguage.isPresent()){
-                System.out.println("Language not present.");
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new Message("Language with name '" + languagePath + "' does not exist"),HttpStatus.NOT_FOUND);
             }
-                return new ResponseEntity(fetchedLanguage.get(),HttpStatus.ACCEPTED);
+                return new ResponseEntity<>(fetchedLanguage.get(),HttpStatus.ACCEPTED);
 
         }
     }
@@ -51,12 +49,12 @@ public class LanguageController {
     public ResponseEntity getAllLanguages(Model model) {
         List<Language> languages = languageService.getAllLanguages();
         if(languages.isEmpty()){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new Message("Cannot get language list, language list is empty"),HttpStatus.NOT_FOUND);
         }
 
         model.addAttribute("languages", languages);
 
-        return new ResponseEntity(languages,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(languages,HttpStatus.ACCEPTED);
     }
 
     // POSTs new language
@@ -67,7 +65,7 @@ public class LanguageController {
 
         Language newLanguage = languageService.createLanguage(savedLanguage);
 
-        return new ResponseEntity(newLanguage,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(newLanguage,HttpStatus.ACCEPTED);
     }
 
     // Updates language
@@ -81,15 +79,14 @@ public class LanguageController {
             langToUpdate = languageService.getLanguage(languagePath);
         }
         if(!langToUpdate.isPresent()){
-            System.out.println("Language not present.");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new Message("Cannot update, language '" + languagePath + "' does not exist"),HttpStatus.NOT_FOUND);
         }
 
         Language newLanguage = langToUpdate.get();
         newLanguage.setName(languageReq.getName());
 
         Language returned = languageService.createLanguage(newLanguage);
-        return new ResponseEntity(returned,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(returned,HttpStatus.ACCEPTED);
     }
 
     // DELs language
@@ -104,13 +101,12 @@ public class LanguageController {
             grabbedLanguage = languageService.getLanguage(languagePath);
         }
         if(!grabbedLanguage.isPresent()){
-            System.out.println("Language not present.");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new Message("Cannot delete, language '" + languagePath + "' does not exist"),HttpStatus.NOT_FOUND);
         }
 
         Language langToDelete = grabbedLanguage.get();
         Language deleted = languageService.destroyLanguage(langToDelete);
-        return new ResponseEntity(deleted,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(deleted,HttpStatus.ACCEPTED);
     }
 
 }
