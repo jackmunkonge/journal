@@ -299,7 +299,7 @@ public class ResourceControllerTest {
     @Test
     public void testUpdateResourcesByNameReturnsNotFoundResponseIfFrameworkNotFound() throws Exception {
         given(frameworkService.getFramework(anyString())).willReturn(Optional.empty());
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT + "/framework/" + "foo"))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put(ENDPOINT + "/framework/" + "foo"))
                 .andExpect(status().is4xxClientError())
                 .andReturn();
     }
@@ -307,7 +307,7 @@ public class ResourceControllerTest {
     @Test
     public void testUpdateResourcesByIdReturnsNotFoundResponseIfFrameworkNotFound() throws Exception {
         given(frameworkService.getFramework(anyInt())).willReturn(Optional.empty());
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT + "/framework/" + 1))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put(ENDPOINT + "/framework/" + 1))
                 .andExpect(status().is4xxClientError())
                 .andReturn();
     }
@@ -315,7 +315,7 @@ public class ResourceControllerTest {
     @Test
     public void testUpdateResourcesByNameReturnsNotFoundResponseIfLanguageNotFound() throws Exception {
         given(languageService.getLanguage(anyString())).willReturn(Optional.empty());
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT + "/language/" + "foo"))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put(ENDPOINT + "/language/" + "foo"))
                 .andExpect(status().is4xxClientError())
                 .andReturn();
     }
@@ -323,7 +323,7 @@ public class ResourceControllerTest {
     @Test
     public void testUpdateResourcesByIdReturnsNotFoundResponseIfLanguageNotFound() throws Exception {
         given(languageService.getLanguage(anyInt())).willReturn(Optional.empty());
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT + "/language/" + 1))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put(ENDPOINT + "/language/" + 1))
                 .andExpect(status().is4xxClientError())
                 .andReturn();
     }

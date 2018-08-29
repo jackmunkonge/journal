@@ -56,15 +56,19 @@ public class LanguageControllerTest {
 
     private List<Language> testLanguages = new ArrayList<>();
 
+    private Language testLanguage;
+
+    private Language testLanguage2;
+
     @Before
     public void setup(){
         mockMvc = MockMvcBuilders.standaloneSetup(languageController).build();
 
-        Language testLanguage = new Language();
+        testLanguage = new Language();
         testLanguage.setName("testLanguage");
         testLanguage.setLanguageId(1);
 
-        Language testLanguage2 = new Language();
+        testLanguage2 = new Language();
         testLanguage2.setName("testLanguage2");
         testLanguage2.setLanguageId(2);
 
@@ -120,7 +124,7 @@ public class LanguageControllerTest {
                 .andReturn();
         List<Language> listLanguages = MAPPER.readValue(result.getResponse().getContentAsString(),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Language.class));
-        assertTrue(listLanguages.size() == testLanguages.size());
+        assertEquals(listLanguages.size(), testLanguages.size());
         assertEquals(listLanguages.get(0).getName(),"testLanguage");
         assertEquals(listLanguages.get(1).getName(),"testLanguage2");
     }

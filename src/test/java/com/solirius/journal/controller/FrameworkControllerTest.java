@@ -58,6 +58,10 @@ public class FrameworkControllerTest {
 
     private Language testLanguage;
 
+    private Framework testFramework;
+
+    private Framework testFramework2;
+
     @Before
     public void setup(){
         mockMvc = MockMvcBuilders.standaloneSetup(frameworkController).build();
@@ -66,12 +70,12 @@ public class FrameworkControllerTest {
         testLanguage.setLanguageId(1);
         testLanguage.setName("testLanguage");
 
-        Framework testFramework = new Framework();
+        testFramework = new Framework();
         testFramework.setName("testFramework");
         testFramework.setFrameworkId(1);
         testFramework.setLanguage(testLanguage);
 
-        Framework testFramework2 = new Framework();
+        testFramework2 = new Framework();
         testFramework2.setName("testFramework2");
         testFramework2.setFrameworkId(2);
         testFramework2.setLanguage(testLanguage);
@@ -79,12 +83,12 @@ public class FrameworkControllerTest {
         testFrameworks = Arrays.asList(testFramework, testFramework2);
         given(frameworkService.getAllFrameworks()).willReturn(testFrameworks);
         given(frameworkService.getAllFrameworks(any(Language.class))).willReturn(testFrameworks);
-        given(frameworkService.getFramework(anyString())).willReturn(Optional.ofNullable(testFramework));
-        given(frameworkService.getFramework(anyInt())).willReturn(Optional.ofNullable(testFramework));
-        given(languageService.getLanguage(anyInt())).willReturn(Optional.of(new Language()));
-        given(languageService.getLanguage(anyString())).willReturn(Optional.of(new Language()));
-        given(frameworkService.createFramework(any(Framework.class))).willReturn(new Framework());
-        given(frameworkService.destroyFramework(any(Framework.class))).willReturn(new Framework());
+        given(frameworkService.getFramework(anyString())).willReturn(Optional.of(testFramework));
+        given(frameworkService.getFramework(anyInt())).willReturn(Optional.of(testFramework));
+        given(languageService.getLanguage(anyInt())).willReturn(Optional.of(testLanguage));
+        given(languageService.getLanguage(anyString())).willReturn(Optional.of(testLanguage));
+        given(frameworkService.createFramework(any(Framework.class))).willReturn(testFramework);
+        given(frameworkService.destroyFramework(any(Framework.class))).willReturn(testFramework);
 
     }
 
@@ -173,7 +177,7 @@ public class FrameworkControllerTest {
                 .andReturn();
         List<Framework> listFrames = MAPPER.readValue(result.getResponse().getContentAsString(),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Framework.class));
-        assertTrue(listFrames.size() == testFrameworks.size());
+        assertEquals(listFrames.size(), testFrameworks.size());
         assertEquals(listFrames.get(0).getName(),"testFramework");
         assertEquals(listFrames.get(1).getName(),"testFramework2");
     }
@@ -244,6 +248,22 @@ public class FrameworkControllerTest {
 
         MvcResult testing = mockMvc.perform(MockMvcRequestBuilders.put(ENDPOINT + "/" + 10)
                 .content(putJson).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateFrameworkByNameReturnsNotFoundResponseIfLanguageNotFound() throws Exception {
+        given(languageService.getLanguage(anyString())).willReturn(Optional.empty());
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put(ENDPOINT + "/" + "foo"))
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateFrameworkByIdReturnsNotFoundResponseIfLanguageNotFound() throws Exception {
+        given(languageService.getLanguage(anyInt())).willReturn(Optional.empty());
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put(ENDPOINT + "/" + 1))
                 .andExpect(status().is4xxClientError())
                 .andReturn();
     }

@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 public class LanguageCreateRequest {
     @JsonProperty("name")
-    @NotNull(message = "Name must be defined")
+    @NotNull(message = "Language name must be defined")
     private String name;
 
     public String getName() {
