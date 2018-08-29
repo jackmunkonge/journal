@@ -101,12 +101,12 @@ public class ResourceControllerTest {
         given(resourceService.getAllResources()).willReturn(testResources);
         given(resourceService.getAllResources(any(Language.class))).willReturn(testResources);
         given(resourceService.getAllResources(any(Framework.class))).willReturn(testResources);
-        given(resourceService.getResource(anyInt())).willReturn(Optional.ofNullable(testResource));
-        given(resourceService.getResource(anyString())).willReturn(Optional.ofNullable(testResource));
-        given(languageService.getLanguage(anyInt())).willReturn(Optional.ofNullable(new Language()));
-        given(frameworkService.getFramework(anyInt())).willReturn(Optional.ofNullable(new Framework()));
-        given(languageService.getLanguage(anyString())).willReturn(Optional.ofNullable(new Language()));
-        given(frameworkService.getFramework(anyString())).willReturn(Optional.ofNullable(new Framework()));
+        given(resourceService.getResource(anyInt())).willReturn(Optional.of(testResource));
+        given(resourceService.getResource(anyString())).willReturn(Optional.of(testResource));
+        given(languageService.getLanguage(anyInt())).willReturn(Optional.ofNullable(testLanguage));
+        given(frameworkService.getFramework(anyInt())).willReturn(Optional.ofNullable(testFramework));
+        given(languageService.getLanguage(anyString())).willReturn(Optional.ofNullable(testLanguage));
+        given(frameworkService.getFramework(anyString())).willReturn(Optional.ofNullable(testFramework));
         given(resourceService.destroyResource(any(Resource.class))).willReturn(testResource);
     }
 
@@ -292,6 +292,38 @@ public class ResourceControllerTest {
 
         MvcResult testing = mockMvc.perform(MockMvcRequestBuilders.put(ENDPOINT + "/" + 10)
                 .content(putJson).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateResourcesByNameReturnsNotFoundResponseIfFrameworkNotFound() throws Exception {
+        given(frameworkService.getFramework(anyString())).willReturn(Optional.empty());
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT + "/framework/" + "foo"))
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateResourcesByIdReturnsNotFoundResponseIfFrameworkNotFound() throws Exception {
+        given(frameworkService.getFramework(anyInt())).willReturn(Optional.empty());
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT + "/framework/" + 1))
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateResourcesByNameReturnsNotFoundResponseIfLanguageNotFound() throws Exception {
+        given(languageService.getLanguage(anyString())).willReturn(Optional.empty());
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT + "/language/" + "foo"))
+                .andExpect(status().is4xxClientError())
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateResourcesByIdReturnsNotFoundResponseIfLanguageNotFound() throws Exception {
+        given(languageService.getLanguage(anyInt())).willReturn(Optional.empty());
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT + "/language/" + 1))
                 .andExpect(status().is4xxClientError())
                 .andReturn();
     }
