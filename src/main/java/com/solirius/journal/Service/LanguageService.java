@@ -26,15 +26,11 @@ public class LanguageService {
         return languageRepository.findByName(languageName);
     }
 
-    public List<Language> getAllLanguages(){
+    public List<Language> getAllLanguages() {
         return languageRepository.findAllByOrderByLanguageIdAsc();
     }
 
-    public List<Language> getAllLanguages(String name){
-        return languageRepository.findAllByNameOrderByLanguageIdAsc(name);
-    }
-
-    public Language createLanguage(Language language){
+    public Language createLanguage(Language language) {
         return languageRepository.save(language);
     }
 

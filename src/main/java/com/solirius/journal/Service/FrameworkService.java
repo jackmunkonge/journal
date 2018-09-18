@@ -1,7 +1,6 @@
 package com.solirius.journal.Service;
 
 import com.solirius.journal.model.Framework;
-import com.solirius.journal.model.Language;
 import com.solirius.journal.repository.FrameworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,14 +28,6 @@ public class FrameworkService {
 
     public List<Framework> getAllFrameworks() {
         return frameworkRepository.findAllByOrderByFrameworkIdAsc();
-    }
-
-    public List<Framework> getAllFrameworks(String name) {
-        return frameworkRepository.findAllByNameOrderByFrameworkIdAsc(name);
-    }
-
-    public List<Framework> getAllFrameworks(Language language){
-        return frameworkRepository.findAllByLanguageOrderByFrameworkIdAsc(language);
     }
 
     public Framework createFramework(Framework framework) {
