@@ -47,13 +47,11 @@ public class FrameworkController {
 
     // GETs all frameworks
     @GetMapping(value = "")
-    public ResponseEntity getAllFrameworks(Model model) {
+    public ResponseEntity getAllFrameworks() {
         List<Framework> frameworks = frameworkService.getAllFrameworks();
         if(frameworks.isEmpty()){
             return new ResponseEntity<>(new Message("Cannot get framework list, framework list is empty"),HttpStatus.NOT_FOUND);
         }
-
-        model.addAttribute("frameworks", frameworks);
 
         return new ResponseEntity<>(frameworks,HttpStatus.ACCEPTED);
     }
