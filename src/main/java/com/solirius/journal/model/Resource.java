@@ -24,8 +24,8 @@ public class Resource {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "path")
-    private String path;
+    @Column(name = "file_path")
+    private String filePath;
 
 
     // PROJECT MODEL
@@ -145,12 +145,12 @@ public class Resource {
         this.description = description;
     }
 
-    public String getPath() {
-        return path;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public List<Project> getProjects() {

@@ -23,6 +23,9 @@ public class Project {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "file_path")
+    private String filePath;
+
 
     // RESOURCE MODEL
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -133,6 +136,14 @@ public class Project {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public List<Resource> getResources() {
