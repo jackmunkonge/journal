@@ -1,8 +1,7 @@
 package com.solirius.journal.service;
 
 import com.solirius.journal.Service.LanguageService;
-import com.solirius.journal.domain.Language;
-import com.solirius.journal.domain.Language;
+import com.solirius.journal.model.Language;
 import com.solirius.journal.repository.LanguageRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +19,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)

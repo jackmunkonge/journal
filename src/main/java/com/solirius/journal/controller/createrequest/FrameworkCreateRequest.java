@@ -1,4 +1,4 @@
-package com.solirius.journal.controller.resource;
+package com.solirius.journal.controller.createrequest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

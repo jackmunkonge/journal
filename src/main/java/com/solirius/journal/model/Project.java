@@ -1,6 +1,5 @@
-package com.solirius.journal.domain;
+package com.solirius.journal.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import javax.persistence.*;
 import java.util.ArrayList;

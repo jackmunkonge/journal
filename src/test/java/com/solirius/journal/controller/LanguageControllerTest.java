@@ -3,8 +3,7 @@ package com.solirius.journal.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solirius.journal.Service.FrameworkService;
 import com.solirius.journal.Service.LanguageService;
-import com.solirius.journal.domain.Framework;
-import com.solirius.journal.domain.Language;
+import com.solirius.journal.model.Language;
 import cucumber.steps.JsonUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +20,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 

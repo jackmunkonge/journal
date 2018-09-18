@@ -1,9 +1,9 @@
 package com.solirius.journal.service;
 
 import com.solirius.journal.Service.ResourceService;
-import com.solirius.journal.domain.Framework;
-import com.solirius.journal.domain.Language;
-import com.solirius.journal.domain.Resource;
+import com.solirius.journal.model.Framework;
+import com.solirius.journal.model.Language;
+import com.solirius.journal.model.Resource;
 import com.solirius.journal.repository.FrameworkRepository;
 import com.solirius.journal.repository.LanguageRepository;
 import com.solirius.journal.repository.ResourceRepository;

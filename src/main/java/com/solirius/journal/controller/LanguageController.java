@@ -1,8 +1,8 @@
 package com.solirius.journal.controller;
 
 import com.solirius.journal.Service.LanguageService;
-import com.solirius.journal.controller.resource.LanguageCreateRequest;
-import com.solirius.journal.domain.Language;
+import com.solirius.journal.controller.createrequest.LanguageCreateRequest;
+import com.solirius.journal.model.Language;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;

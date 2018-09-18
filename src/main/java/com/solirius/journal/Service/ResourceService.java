@@ -1,10 +1,9 @@
 package com.solirius.journal.Service;
 
-import com.solirius.journal.domain.Framework;
-import com.solirius.journal.domain.Language;
-import com.solirius.journal.domain.Resource;
+import com.solirius.journal.model.Framework;
+import com.solirius.journal.model.Language;
+import com.solirius.journal.model.Resource;
 import com.solirius.journal.repository.ResourceRepository;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +28,6 @@ public class ResourceService {
 
     public List<Resource> getAllResources() {
         return resourceRepository.findAllByOrderByResourceIdAsc();
-    }
-
-    public List<Resource> getAllResources(String name) {
-        return resourceRepository.findAllByNameOrderByResourceIdAsc(name);
     }
 
     public List<Resource> getAllResources(Framework framework) {

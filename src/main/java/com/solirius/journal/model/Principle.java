@@ -1,4 +1,4 @@
-package com.solirius.journal.domain;
+package com.solirius.journal.model;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

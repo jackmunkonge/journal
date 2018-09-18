@@ -2,12 +2,10 @@ package cucumber.steps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solirius.journal.Application;
-import com.solirius.journal.controller.resource.FrameworkCreateRequest;
-import com.solirius.journal.controller.resource.LanguageCreateRequest;
-import com.solirius.journal.controller.resource.ResourceCreateRequest;
-import com.solirius.journal.domain.Framework;
-import com.solirius.journal.domain.Language;
-import com.solirius.journal.domain.Resource;
+import com.solirius.journal.controller.createrequest.FrameworkCreateRequest;
+import com.solirius.journal.controller.createrequest.LanguageCreateRequest;
+import com.solirius.journal.controller.createrequest.ResourceCreateRequest;
+import com.solirius.journal.model.Resource;
 import com.solirius.journal.repository.FrameworkRepository;
 import com.solirius.journal.repository.LanguageRepository;
 import com.solirius.journal.repository.ResourceRepository;

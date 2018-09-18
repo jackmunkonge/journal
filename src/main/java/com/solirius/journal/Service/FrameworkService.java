@@ -1,7 +1,7 @@
 package com.solirius.journal.Service;
 
-import com.solirius.journal.domain.Framework;
-import com.solirius.journal.domain.Language;
+import com.solirius.journal.model.Framework;
+import com.solirius.journal.model.Language;
 import com.solirius.journal.repository.FrameworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,7 @@
-package com.solirius.journal.controller.resource;
+package com.solirius.journal.controller.createrequest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
 public class ResourceCreateRequest {
