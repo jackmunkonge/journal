@@ -127,7 +127,6 @@ public class LanguageController {
 
         if(!reqBody.getFrameworks().isEmpty()) {
             for(Framework framework : reqBody.getFrameworks()) {
-                System.out.println(framework);
                 if(!frameworkService.getFramework(framework.getName()).isPresent()) {
                     return new ResponseEntity<>(new Message("Cannot update, library with name '" + framework.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
                 }
