@@ -15,15 +15,18 @@ public class Resource {
     @Column(name = "resource_id")
     private Integer resourceId;
 
-    @Column(name = "name",unique = true)
+    @Column(name = "name", unique=true, nullable=false)
     private String name;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "url")
     private String url;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "description")
     private String description;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "file_path")
     private String filePath;
 

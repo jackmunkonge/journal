@@ -1,0 +1,66 @@
+databaseChangeLog:
+- changeSet:
+    id: 1537368340170-1
+    author: jack (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: framework
+- changeSet:
+    id: 1537368340170-2
+    author: jack (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: language
+- changeSet:
+    id: 1537368340170-3
+    author: jack (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: library
+- changeSet:
+    id: 1537368340170-4
+    author: jack (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: plugin
+- changeSet:
+    id: 1537368340170-5
+    author: jack (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: principle
+- changeSet:
+    id: 1537368340170-6
+    author: jack (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: project
+- changeSet:
+    id: 1537368340170-7
+    author: jack (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: resource
+- changeSet:
+    id: 1537368340170-8
+    author: jack (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: tool
+

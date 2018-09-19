@@ -1,15 +1,12 @@
 package com.solirius.journal.controller;
 
 import com.solirius.journal.Service.FrameworkService;
-import com.solirius.journal.Service.LanguageService;
-import com.solirius.journal.controller.createrequest.FrameworkCreateRequest;
+import com.solirius.journal.Service.LibraryService;
 import com.solirius.journal.model.Framework;
-import com.solirius.journal.model.Language;
-import javassist.NotFoundException;
+import com.solirius.journal.model.Library;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +20,11 @@ public class FrameworkController {
     private FrameworkService frameworkService;
 
     @Autowired
-    private LanguageService languageService;
+    private LibraryService libraryService;
 
     // GETs framework
     @GetMapping(value = "{frameworkPath}")
-    public ResponseEntity getFramework(@PathVariable String frameworkPath){
+    public ResponseEntity getFramework(@PathVariable String frameworkPath) {
         Optional<Framework> fetchedFrame;
         try{
             int frameworkId = Integer.parseInt(frameworkPath);
@@ -56,92 +53,85 @@ public class FrameworkController {
         return new ResponseEntity<>(frameworks,HttpStatus.ACCEPTED);
     }
 
-    // GETs framework list by language
-    @GetMapping(value = "/language/{languagePath}")
-    public ResponseEntity getByLanguage(@PathVariable String languagePath) {
-        Optional<Language> reqLanguage;
-        try{
-            int languageId = Integer.parseInt(languagePath);
-            reqLanguage = languageService.getLanguage(languageId);
-
-        } catch(NumberFormatException nfe){
-            reqLanguage = languageService.getLanguage(languagePath);
-        }
-
-        if(!reqLanguage.isPresent()){
-            return new ResponseEntity<>(new Message("Frameworks by language '" + languagePath + "' do not exist"),HttpStatus.NOT_FOUND);
-        }
-
-        List<Framework> langResources = frameworkService.getAllFrameworks(reqLanguage.get());
-        return new ResponseEntity<>(langResources,HttpStatus.ACCEPTED);
-    }
-
     // POSTs new framework
     @PostMapping
-    public ResponseEntity postFramework(@RequestBody FrameworkCreateRequest request){
-        Framework savedFramework = new Framework();
-        savedFramework.setName(request.getName());
+    public ResponseEntity postFramework(@RequestBody Framework reqBody) {
 
-        Optional<Language> lang = languageService.getLanguage(request.getLanguageName());
-        if(!lang.isPresent()){
-            return new ResponseEntity<>(new Message("Cannot create framework, language with name '" + request.getLanguageName() + "' does not exist"),HttpStatus.BAD_REQUEST);
+        if(frameworkService.getFramework(reqBody.getName()).isPresent()) {
+            return new ResponseEntity<>(new Message("Cannot create, framework with name '" + reqBody.getName() + "' already exists"), HttpStatus.BAD_REQUEST);
         }
-        savedFramework.setLanguage(lang.get());
-        Framework newFramework = frameworkService.createFramework(savedFramework);
+
+        if(!reqBody.getLibraries().isEmpty()){
+            for(Library lib : reqBody.getLibraries()) {
+                Optional<Library> reqLib = libraryService.getLibrary(lib.getName());
+                if(!reqLib.isPresent()){
+                    return new ResponseEntity<>(new Message("Cannot create, library with name '" + lib.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+
+        Framework newFramework = frameworkService.createFramework(reqBody);
 
         return new ResponseEntity<>(newFramework,HttpStatus.ACCEPTED);
     }
 
     // Updates framework
     @PutMapping(value = "{frameworkPath}")
-    public ResponseEntity putFramework(@PathVariable String frameworkPath,@RequestBody FrameworkCreateRequest frameworkReq) throws NotFoundException {
-        Optional<Framework> frameToUpdate;
+    public ResponseEntity putFramework(@PathVariable String frameworkPath, @RequestBody Framework reqBody) {
+        Optional<Framework> frameworkToUpdate;
         try{
             int frameworkId = Integer.parseInt(frameworkPath);
-            frameToUpdate = frameworkService.getFramework(frameworkId);
-        } catch(NumberFormatException nfe){
-            frameToUpdate = frameworkService.getFramework(frameworkPath);
-        }
-        if(!frameToUpdate.isPresent()){
-            return new ResponseEntity<>(new Message("Cannot update, framework '" + frameworkPath + "' does not exist"),HttpStatus.NOT_FOUND);
-        }
-
-        Framework newFrame = frameToUpdate.get();
-        if (frameworkReq.getName() != null) {
-            newFrame.setName(frameworkReq.getName());
-        }
-        if(frameworkReq.getLanguageName() != null){
-            Optional<Language> newLanguage = languageService.getLanguage(frameworkReq.getLanguageName());
-            if(!newLanguage.isPresent()){
-                return new ResponseEntity<>(new Message("Cannot update, language by name '" + frameworkReq.getLanguageName() + "' does not exist"),HttpStatus.NOT_FOUND);
-            } else {
-                newFrame.setLanguage(newLanguage.get());
+            frameworkToUpdate = frameworkService.getFramework(frameworkId);
+            if(!frameworkToUpdate.isPresent()){
+                return new ResponseEntity<>(new Message("Cannot update, framework with ID '" + frameworkId + "' does not exist"), HttpStatus.NOT_FOUND);
             }
-        } else {
-            newFrame.setLanguage(null);
+        } catch(NumberFormatException nfe) {
+            frameworkToUpdate = frameworkService.getFramework(frameworkPath);
+            if(!frameworkToUpdate.isPresent()){
+                return new ResponseEntity<>(new Message("Cannot update, framework with name '" + frameworkPath + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
         }
 
-        Framework returned = frameworkService.createFramework(newFrame);
-        return new ResponseEntity<>(returned,HttpStatus.ACCEPTED);
+
+        Framework newFramework = frameworkToUpdate.get();
+        if(reqBody.getName() != null) {
+            newFramework.setName(reqBody.getName());
+        }
+
+        if(reqBody.getDescription() != null) {
+            newFramework.setDescription(reqBody.getDescription());
+        }
+
+        if(!reqBody.getLibraries().isEmpty()) {
+            for(Library lib : reqBody.getLibraries()) {
+                if(!libraryService.getLibrary(lib.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, library with name '" + lib.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                }
+            }
+            newFramework.setLibraries(reqBody.getLibraries());
+        }
+
+        Framework returnedFramework = frameworkService.createFramework(newFramework);
+        return new ResponseEntity<>(returnedFramework, HttpStatus.ACCEPTED);
     }
 
     // DELs framework
     @DeleteMapping(value = "{frameworkPath}")
-    public ResponseEntity delFramework(@PathVariable String frameworkPath){
-        Optional<Framework> grabbedFrame;
+    public ResponseEntity delFramework(@PathVariable String frameworkPath) {
+        Optional<Framework> prevFramework;
         try{
             int frameworkId = Integer.parseInt(frameworkPath);
-            grabbedFrame = frameworkService.getFramework(frameworkId);
+            prevFramework = frameworkService.getFramework(frameworkId);
 
         } catch(NumberFormatException nfe){
-            grabbedFrame = frameworkService.getFramework(frameworkPath);
+            prevFramework = frameworkService.getFramework(frameworkPath);
         }
-        if(!grabbedFrame.isPresent()){
+        if(!prevFramework.isPresent()){
             return new ResponseEntity<>(new Message("Framework '" + frameworkPath + "' does not exist"),HttpStatus.NOT_FOUND);
         }
 
-        Framework frameToDelete = grabbedFrame.get();
-        Framework deleted = frameworkService.destroyFramework(frameToDelete);
-        return new ResponseEntity<>(deleted,HttpStatus.ACCEPTED);
+        Framework frameworkToDelete = prevFramework.get();
+        Framework deletedFramework = frameworkService.destroyFramework(frameworkToDelete);
+        return new ResponseEntity<>(deletedFramework,HttpStatus.ACCEPTED);
     }
 }

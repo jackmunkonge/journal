@@ -15,9 +15,10 @@ public class Library {
     @Column(name = "library_id")
     private Integer libraryId;
 
-    @Column(name = "name",unique = true)
+    @Column(name = "name", unique=true, nullable=false)
     private String name;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "description")
     private String description;
 

@@ -1,0 +1,1187 @@
+databaseChangeLog:
+- changeSet:
+    id: 1537366004926-1
+    author: jack (generated)
+    changes:
+    - createSequence:
+        sequenceName: hibernate_sequence
+- changeSet:
+    id: 1537366004926-2
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: frameworkPK
+            name: framework_id
+            type: INT
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        tableName: framework
+- changeSet:
+    id: 1537366004926-3
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: framework_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: library_id
+            type: INT
+        tableName: framework_library
+- changeSet:
+    id: 1537366004926-4
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: languagePK
+            name: language_id
+            type: INT
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        tableName: language
+- changeSet:
+    id: 1537366004926-5
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: language_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: framework_id
+            type: INT
+        tableName: language_framework
+- changeSet:
+    id: 1537366004926-6
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: language_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: library_id
+            type: INT
+        tableName: language_library
+- changeSet:
+    id: 1537366004926-7
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: libraryPK
+            name: library_id
+            type: INT
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        tableName: library
+- changeSet:
+    id: 1537366004926-8
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: library_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: tool_id
+            type: INT
+        tableName: library_tool
+- changeSet:
+    id: 1537366004926-9
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: pluginPK
+            name: plugin_id
+            type: INT
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        tableName: plugin
+- changeSet:
+    id: 1537366004926-10
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: plugin_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: framework_id
+            type: INT
+        tableName: plugin_framework
+- changeSet:
+    id: 1537366004926-11
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: plugin_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: language_id
+            type: INT
+        tableName: plugin_language
+- changeSet:
+    id: 1537366004926-12
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: principlePK
+            name: principle_id
+            type: INT
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        tableName: principle
+- changeSet:
+    id: 1537366004926-13
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: principle_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: language_id
+            type: INT
+        tableName: principle_language
+- changeSet:
+    id: 1537366004926-14
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: principle_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: tool_id
+            type: INT
+        tableName: principle_tool
+- changeSet:
+    id: 1537366004926-15
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: projectPK
+            name: project_id
+            type: INT
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: file_path
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: url
+            type: VARCHAR(255)
+        tableName: project
+- changeSet:
+    id: 1537366004926-16
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: project_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: framework_id
+            type: INT
+        tableName: project_framework
+- changeSet:
+    id: 1537366004926-17
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: project_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: language_id
+            type: INT
+        tableName: project_language
+- changeSet:
+    id: 1537366004926-18
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: project_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: library_id
+            type: INT
+        tableName: project_library
+- changeSet:
+    id: 1537366004926-19
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: project_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: principle_id
+            type: INT
+        tableName: project_principle
+- changeSet:
+    id: 1537366004926-20
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: project_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: resource_id
+            type: INT
+        tableName: project_resource
+- changeSet:
+    id: 1537366004926-21
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: project_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: tool_id
+            type: INT
+        tableName: project_tool
+- changeSet:
+    id: 1537366004926-22
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: resourcePK
+            name: resource_id
+            type: INT
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: file_path
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: url
+            type: VARCHAR(255)
+        tableName: resource
+- changeSet:
+    id: 1537366004926-23
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: resource_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: framework_id
+            type: INT
+        tableName: resource_framework
+- changeSet:
+    id: 1537366004926-24
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: resource_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: language_id
+            type: INT
+        tableName: resource_language
+- changeSet:
+    id: 1537366004926-25
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: resource_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: library_id
+            type: INT
+        tableName: resource_library
+- changeSet:
+    id: 1537366004926-26
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: resource_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: plugin_id
+            type: INT
+        tableName: resource_plugin
+- changeSet:
+    id: 1537366004926-27
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: resource_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: principle_id
+            type: INT
+        tableName: resource_principle
+- changeSet:
+    id: 1537366004926-28
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: resource_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: tool_id
+            type: INT
+        tableName: resource_tool
+- changeSet:
+    id: 1537366004926-29
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: toolPK
+            name: tool_id
+            type: INT
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        tableName: tool
+- changeSet:
+    id: 1537366004926-30
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: tool_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: framework_id
+            type: INT
+        tableName: tool_framework
+- changeSet:
+    id: 1537366004926-31
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: tool_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: language_id
+            type: INT
+        tableName: tool_language
+- changeSet:
+    id: 1537366004926-32
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: tool_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: plugin_id
+            type: INT
+        tableName: tool_plugin
+- changeSet:
+    id: 1537366004926-33
+    author: jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_FRAMEWORKNAME_COL
+        tableName: framework
+- changeSet:
+    id: 1537366004926-34
+    author: jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_LANGUAGENAME_COL
+        tableName: language
+- changeSet:
+    id: 1537366004926-35
+    author: jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_LIBRARYNAME_COL
+        tableName: library
+- changeSet:
+    id: 1537366004926-36
+    author: jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_PLUGINNAME_COL
+        tableName: plugin
+- changeSet:
+    id: 1537366004926-37
+    author: jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_PRINCIPLENAME_COL
+        tableName: principle
+- changeSet:
+    id: 1537366004926-38
+    author: jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_PROJECTNAME_COL
+        tableName: project
+- changeSet:
+    id: 1537366004926-39
+    author: jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_RESOURCENAME_COL
+        tableName: resource
+- changeSet:
+    id: 1537366004926-40
+    author: jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_TOOLNAME_COL
+        tableName: tool
+- changeSet:
+    id: 1537366004926-41
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: plugin_id
+        baseTableName: plugin_language
+        constraintName: FK1727vwvu9x2skhavem1yvof80
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: plugin_id
+        referencedTableName: plugin
+- changeSet:
+    id: 1537366004926-42
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: resource_id
+        baseTableName: resource_principle
+        constraintName: FK25xwwkwhj8uvd19u0qmcgiu3a
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: resource_id
+        referencedTableName: resource
+- changeSet:
+    id: 1537366004926-43
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: tool_id
+        baseTableName: tool_plugin
+        constraintName: FK4larftwe7hy1symvtenfmibwk
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: tool_id
+        referencedTableName: tool
+- changeSet:
+    id: 1537366004926-44
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: principle_id
+        baseTableName: principle_language
+        constraintName: FK4wpkhp2gtuhv56gcba2jy2dyf
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: principle_id
+        referencedTableName: principle
+- changeSet:
+    id: 1537366004926-45
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: language_id
+        baseTableName: language_library
+        constraintName: FK4wsvx9c61lg66jvblgefqsxto
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: language_id
+        referencedTableName: language
+- changeSet:
+    id: 1537366004926-46
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: library_id
+        baseTableName: language_library
+        constraintName: FK5cr4g8pi1j8lenwfhky0toqit
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: library_id
+        referencedTableName: library
+- changeSet:
+    id: 1537366004926-47
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: framework_id
+        baseTableName: plugin_framework
+        constraintName: FK7etq855l8odqw2gd2chygnw4g
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: framework_id
+        referencedTableName: framework
+- changeSet:
+    id: 1537366004926-48
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: language_id
+        baseTableName: project_language
+        constraintName: FK7hrk9e3kx4gf6c2t00mvwfnng
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: language_id
+        referencedTableName: language
+- changeSet:
+    id: 1537366004926-49
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: resource_id
+        baseTableName: resource_language
+        constraintName: FK7nndjaexbexehu8ckctkvmlg4
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: resource_id
+        referencedTableName: resource
+- changeSet:
+    id: 1537366004926-50
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: resource_id
+        baseTableName: resource_tool
+        constraintName: FK7yej2rm84wampqdp5odxcanvd
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: resource_id
+        referencedTableName: resource
+- changeSet:
+    id: 1537366004926-51
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: tool_id
+        baseTableName: library_tool
+        constraintName: FK83cooyoqmh4n16xmc0jdfua5y
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: tool_id
+        referencedTableName: tool
+- changeSet:
+    id: 1537366004926-52
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: plugin_id
+        baseTableName: plugin_framework
+        constraintName: FK84froq3r6ddvruqxwadwgtsfg
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: plugin_id
+        referencedTableName: plugin
+- changeSet:
+    id: 1537366004926-53
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: tool_id
+        baseTableName: principle_tool
+        constraintName: FK96l6y2fae7ayjkh2mu4qt2wqv
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: tool_id
+        referencedTableName: tool
+- changeSet:
+    id: 1537366004926-54
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: framework_id
+        baseTableName: framework_library
+        constraintName: FK96y5drhtgi3dcqak56j6bhq1k
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: framework_id
+        referencedTableName: framework
+- changeSet:
+    id: 1537366004926-55
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: framework_id
+        baseTableName: tool_framework
+        constraintName: FKb1qcyuvd3fgy2b8danx3cijhn
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: framework_id
+        referencedTableName: framework
+- changeSet:
+    id: 1537366004926-56
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: plugin_id
+        baseTableName: resource_plugin
+        constraintName: FKb8ve1ojw5e5px0ee6crj4wbr8
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: plugin_id
+        referencedTableName: plugin
+- changeSet:
+    id: 1537366004926-57
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: tool_id
+        baseTableName: project_tool
+        constraintName: FKccyf3tyqxys5pnrxa0xudlovx
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: tool_id
+        referencedTableName: tool
+- changeSet:
+    id: 1537366004926-58
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: framework_id
+        baseTableName: project_framework
+        constraintName: FKcjxwfg2m6f5759ugqd5n6eti2
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: framework_id
+        referencedTableName: framework
+- changeSet:
+    id: 1537366004926-59
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: library_id
+        baseTableName: library_tool
+        constraintName: FKcwv7h7e8mrqj3mmftva7nnbt5
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: library_id
+        referencedTableName: library
+- changeSet:
+    id: 1537366004926-60
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: resource_id
+        baseTableName: resource_framework
+        constraintName: FKd40xks0ir30qp2q7c2xa6848i
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: resource_id
+        referencedTableName: resource
+- changeSet:
+    id: 1537366004926-61
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: tool_id
+        baseTableName: resource_tool
+        constraintName: FKey9ubgffs9hil4dt60001rhay
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: tool_id
+        referencedTableName: tool
+- changeSet:
+    id: 1537366004926-62
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: language_id
+        baseTableName: tool_language
+        constraintName: FKf1sk9ji457nbuf3mjxare2g61
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: language_id
+        referencedTableName: language
+- changeSet:
+    id: 1537366004926-63
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: resource_id
+        baseTableName: project_resource
+        constraintName: FKf5dm3ds6o6uqbbk8is7sge7jb
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: resource_id
+        referencedTableName: resource
+- changeSet:
+    id: 1537366004926-64
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: project_id
+        baseTableName: project_principle
+        constraintName: FKgmto9s2xs1qub4bs4lo3kcy1o
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: project_id
+        referencedTableName: project
+- changeSet:
+    id: 1537366004926-65
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: project_id
+        baseTableName: project_library
+        constraintName: FKh58s8q0cgg84argctcibaiebv
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: project_id
+        referencedTableName: project
+- changeSet:
+    id: 1537366004926-66
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: language_id
+        baseTableName: language_framework
+        constraintName: FKhrojts0bp9dhwa60b1jivyhsl
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: language_id
+        referencedTableName: language
+- changeSet:
+    id: 1537366004926-67
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: library_id
+        baseTableName: resource_library
+        constraintName: FKivh591xpmxg1myuewlk8ogmtq
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: library_id
+        referencedTableName: library
+- changeSet:
+    id: 1537366004926-68
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: framework_id
+        baseTableName: resource_framework
+        constraintName: FKj2tkaotylwl8xbtwlwdgmmscx
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: framework_id
+        referencedTableName: framework
+- changeSet:
+    id: 1537366004926-69
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: project_id
+        baseTableName: project_language
+        constraintName: FKj9u225we27islp3g8lg52kx3b
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: project_id
+        referencedTableName: project
+- changeSet:
+    id: 1537366004926-70
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: principle_id
+        baseTableName: resource_principle
+        constraintName: FKjp4clyw5mn9pvxoo7ahrqcmuy
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: principle_id
+        referencedTableName: principle
+- changeSet:
+    id: 1537366004926-71
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: resource_id
+        baseTableName: resource_library
+        constraintName: FKjsjk6fbsm18t57a16isetvf88
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: resource_id
+        referencedTableName: resource
+- changeSet:
+    id: 1537366004926-72
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: language_id
+        baseTableName: plugin_language
+        constraintName: FKlm2ln8e5i2pm2unl466iylx49
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: language_id
+        referencedTableName: language
+- changeSet:
+    id: 1537366004926-73
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: library_id
+        baseTableName: framework_library
+        constraintName: FKlu6mn2x1xiw9xjx2xgi6wy9so
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: library_id
+        referencedTableName: library
+- changeSet:
+    id: 1537366004926-74
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: tool_id
+        baseTableName: tool_framework
+        constraintName: FKm6vjjbwommr0ro2r0r08t6fw0
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: tool_id
+        referencedTableName: tool
+- changeSet:
+    id: 1537366004926-75
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: project_id
+        baseTableName: project_framework
+        constraintName: FKmny2in4l5bj0p1mqy5xr064uf
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: project_id
+        referencedTableName: project
+- changeSet:
+    id: 1537366004926-76
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: plugin_id
+        baseTableName: tool_plugin
+        constraintName: FKo61lkgvl4cdceqbrs1bysx0j
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: plugin_id
+        referencedTableName: plugin
+- changeSet:
+    id: 1537366004926-77
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: resource_id
+        baseTableName: resource_plugin
+        constraintName: FKoy26v0xyuenlrjfyhgl25pqlg
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: resource_id
+        referencedTableName: resource
+- changeSet:
+    id: 1537366004926-78
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: tool_id
+        baseTableName: tool_language
+        constraintName: FKp8ndxwwx7ikxf55j0osivfck8
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: tool_id
+        referencedTableName: tool
+- changeSet:
+    id: 1537366004926-79
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: framework_id
+        baseTableName: language_framework
+        constraintName: FKphj2yfefy32mw8lggt9tw0oyc
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: framework_id
+        referencedTableName: framework
+- changeSet:
+    id: 1537366004926-80
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: language_id
+        baseTableName: principle_language
+        constraintName: FKplc8knf6qj3wtmg8sbwidcxdf
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: language_id
+        referencedTableName: language
+- changeSet:
+    id: 1537366004926-81
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: project_id
+        baseTableName: project_resource
+        constraintName: FKsia08gjbokwkenn8ipylim7e8
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: project_id
+        referencedTableName: project
+- changeSet:
+    id: 1537366004926-82
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: principle_id
+        baseTableName: principle_tool
+        constraintName: FKspp0lw4q34ica4uiwnrpurn0e
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: principle_id
+        referencedTableName: principle
+- changeSet:
+    id: 1537366004926-83
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: project_id
+        baseTableName: project_tool
+        constraintName: FKt41t8mhampnib2a7rbrrtbq79
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: project_id
+        referencedTableName: project
+- changeSet:
+    id: 1537366004926-84
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: language_id
+        baseTableName: resource_language
+        constraintName: FKtarev9w5v3hqneeq3gqyv212q
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: language_id
+        referencedTableName: language
+- changeSet:
+    id: 1537366004926-85
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: principle_id
+        baseTableName: project_principle
+        constraintName: FKwe69rb7iycjvjbodwmdkcu4a
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: principle_id
+        referencedTableName: principle
+- changeSet:
+    id: 1537366004926-86
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: library_id
+        baseTableName: project_library
+        constraintName: FKy9rqhrm2jt1rhaool04eiew3
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: library_id
+        referencedTableName: library
+

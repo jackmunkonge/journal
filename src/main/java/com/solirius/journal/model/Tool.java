@@ -15,9 +15,10 @@ public class Tool {
     @Column(name = "tool_id")
     private Integer toolId;
 
-    @Column(name = "name",unique = true)
+    @Column(name = "name", unique=true, nullable=false)
     private String name;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "description")
     private String description;
 

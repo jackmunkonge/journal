@@ -15,9 +15,10 @@ public class Language {
     @Column(name = "language_id")
     private Integer languageId;
 
-    @Column(name = "name",unique = true)
+    @Column(name = "name", unique=true, nullable=false)
     private String name;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "description")
     private String description;
 

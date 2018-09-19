@@ -14,12 +14,13 @@ public class Project {
     @Column(name = "project_id")
     private Integer projectId;
 
-    @Column(name = "name",unique = true)
+    @Column(name = "name", unique=true, nullable=false)
     private String name;
 
     @Column(name = "url")
     private String url;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "description")
     private String description;
 

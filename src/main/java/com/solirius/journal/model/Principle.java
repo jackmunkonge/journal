@@ -16,9 +16,10 @@ public class Principle {
     @Column(name = "principle_id")
     private Integer principleId;
 
-    @Column(name = "name",unique = true)
+    @Column(name = "name",unique = true, nullable=false)
     private String name;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "description")
     private String description;
 

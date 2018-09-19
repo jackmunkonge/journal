@@ -15,17 +15,12 @@ public class Plugin {
     @Column(name = "plugin_id")
     private Integer pluginId;
 
-    @Column(name = "name",unique = true)
+    @Column(name = "name",unique=true, nullable=false)
     private String name;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "description")
     private String description;
-
-
-    // PROJECT MODEL
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "plugins")
-//    @JsonIgnoreProperties({"projects", "resources"})
-    private List<Project> projects = new ArrayList<>();
 
     // RESOURCE MODEL
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "plugins")
@@ -87,14 +82,6 @@ public class Plugin {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
     }
 
     public List<Resource> getResources() {

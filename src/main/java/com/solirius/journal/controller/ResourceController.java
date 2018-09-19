@@ -1,17 +1,10 @@
 package com.solirius.journal.controller;
 
-import com.solirius.journal.Service.FrameworkService;
-import com.solirius.journal.Service.LanguageService;
-import com.solirius.journal.Service.ResourceService;
-import com.solirius.journal.controller.createrequest.ResourceCreateRequest;
-import com.solirius.journal.model.Framework;
-import com.solirius.journal.model.Language;
-import com.solirius.journal.model.Resource;
-import javassist.NotFoundException;
+import com.solirius.journal.Service.*;
+import com.solirius.journal.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,14 +18,29 @@ public class ResourceController {
     private ResourceService resourceService;
 
     @Autowired
+    private LibraryService libraryService;
+
+    @Autowired
     private FrameworkService frameworkService;
+
+    @Autowired
+    private ToolService toolService;
+
+    @Autowired
+    private ProjectService projectService;
+
+    @Autowired
+    private PrincipleService principleService;
+
+    @Autowired
+    private PluginService pluginService;
 
     @Autowired
     private LanguageService languageService;
 
     // GETs resource
     @GetMapping(value = "{resourcePath}")
-    public ResponseEntity getResource(@PathVariable String resourcePath){
+    public ResponseEntity getResource(@PathVariable String resourcePath) {
         Optional<Resource> fetchedResource;
         try{
             int resourceId = Integer.parseInt(resourcePath);
@@ -41,179 +49,221 @@ public class ResourceController {
                 return new ResponseEntity<>(new Message("Resource with ID '" + resourceId + "' does not exist"),HttpStatus.NOT_FOUND);
             }
             return new ResponseEntity<>(fetchedResource.get(),HttpStatus.ACCEPTED);
-
         } catch(NumberFormatException nfe){
             fetchedResource = resourceService.getResource(resourcePath);
             if(!fetchedResource.isPresent()){
                 return new ResponseEntity<>(new Message("Resource with name '" + resourcePath + "' does not exist"),HttpStatus.NOT_FOUND);
             }
             return new ResponseEntity<>(fetchedResource.get(),HttpStatus.ACCEPTED);
-
         }
     }
 
     // GETs all resources
     @GetMapping(value = "")
-    public ResponseEntity getResources(Model model) {
+    public ResponseEntity getAllResources() {
         List<Resource> resources = resourceService.getAllResources();
         if(resources.isEmpty()){
             return new ResponseEntity<>(new Message("Cannot get resource list, resource list is empty"),HttpStatus.NOT_FOUND);
         }
 
-        model.addAttribute("resources", resources);
-
         return new ResponseEntity<>(resources,HttpStatus.ACCEPTED);
     }
 
-    // GETs resource list by language
-    @GetMapping(value = "/language/{languagePath}")
-    public ResponseEntity getByLanguage(@PathVariable String languagePath) {
-        Optional<Language> reqLanguage;
-        try{
-            int languageId = Integer.parseInt(languagePath);
-            reqLanguage = languageService.getLanguage(languageId);
-            if(!reqLanguage.isPresent()){
-                return new ResponseEntity<>(new Message("Resources by language ID '" + languageId + "' do not exist"),HttpStatus.NOT_FOUND);
-            } else {
-                List<Resource> langResources = resourceService.getAllResources(reqLanguage.get());
-                return new ResponseEntity<>(langResources,HttpStatus.ACCEPTED);
-            }
-        } catch(NumberFormatException nfe){
-            reqLanguage = languageService.getLanguage(languagePath);
-            if(!reqLanguage.isPresent()){
-                System.out.println("Language not present.");
-                return new ResponseEntity<>(new Message("Resources by language name '" + languagePath + "' do not exist"),HttpStatus.NOT_FOUND);
-            } else {
-                List<Resource> langResources = resourceService.getAllResources(reqLanguage.get());
-                return new ResponseEntity<>(langResources,HttpStatus.ACCEPTED);
-            }
-        }
-    }
-
-    // GETs resource list by framework
-    @GetMapping(value = "/framework/{frameworkPath}")
-    public ResponseEntity getByFramework(@PathVariable String frameworkPath) {
-        Optional<Framework> reqFramework;
-        try{
-            int frameworkId = Integer.parseInt(frameworkPath);
-            reqFramework = frameworkService.getFramework(frameworkId);
-            if(!reqFramework.isPresent()){
-                return new ResponseEntity<>(new Message("Resources by framework ID '" + frameworkId + "' do not exist"),HttpStatus.NOT_FOUND);
-            } else {
-                List<Resource> frameResources = resourceService.getAllResources(reqFramework.get());
-                return new ResponseEntity<>(frameResources,HttpStatus.ACCEPTED);
-            }
-        } catch(NumberFormatException nfe){
-            reqFramework = frameworkService.getFramework(frameworkPath);
-            if(!reqFramework.isPresent()){
-                return new ResponseEntity<>(new Message("Resources by language name '" + frameworkPath + "' do not exist"),HttpStatus.NOT_FOUND);
-            } else {
-                List<Resource> frameResources = resourceService.getAllResources(reqFramework.get());
-                return new ResponseEntity<>(frameResources,HttpStatus.ACCEPTED);
-            }
-        }
-    }
-
-    // POSTs resource
+    // POSTs new resource
     @PostMapping
-    public ResponseEntity postResource(@RequestBody ResourceCreateRequest request){
-        Resource savedResource = new Resource();
+    public ResponseEntity postResource(@RequestBody Resource reqBody) {
 
-        if(resourceService.getResource(request.getName()).isPresent()){
-            return new ResponseEntity<>(new Message("Cannot create, a resource with name '" + request.getName() + "' already exists"),HttpStatus.BAD_REQUEST);
+        if(resourceService.getResource(reqBody.getName()).isPresent()) {
+            return new ResponseEntity<>(new Message("Cannot create, resource with name '" + reqBody.getName() + "' already exists"), HttpStatus.BAD_REQUEST);
         }
 
-        savedResource.setName(request.getName());
-        savedResource.setUrl(request.getUrl());
-
-        if(request.getFrameworkName() != null && !request.getFrameworkName().isEmpty()){
-            Optional<Framework> frame = frameworkService.getFramework(request.getFrameworkName());
-            if(!frame.isPresent()){
-                return new ResponseEntity<>(new Message("Cannot create resource, framework with name '" + request.getFrameworkName() + "' does not exist"),HttpStatus.BAD_REQUEST);
+        if(!reqBody.getProjects().isEmpty()){
+            for(Project project : reqBody.getProjects()) {
+                Optional<Project> reqProject = projectService.getProject(project.getName());
+                if(!reqProject.isPresent()){
+                    return new ResponseEntity<>(new Message("Cannot create, project with name '" + project.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
+                }
             }
-            savedResource.setFramework(frame.get());
         }
 
-        if(request.getLanguageName() != null && !request.getLanguageName().isEmpty()){
-            Optional<Language> lang = languageService.getLanguage(request.getLanguageName());
-            if(!lang.isPresent()){
-                return new ResponseEntity<>(new Message("Cannot create resource, language with name '" + request.getLanguageName() + "' does not exist"),HttpStatus.BAD_REQUEST);
+        if(!reqBody.getTools().isEmpty()){
+            for(Tool tool : reqBody.getTools()) {
+                Optional<Tool> reqTool = toolService.getTool(tool.getName());
+                if(!reqTool.isPresent()){
+                    return new ResponseEntity<>(new Message("Cannot create, tool with name '" + tool.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
+                }
             }
-            savedResource.setLanguage(lang.get());
         }
 
-        Resource resource = resourceService.createResource(savedResource);
+        if(!reqBody.getPlugins().isEmpty()){
+            for(Plugin plugin : reqBody.getPlugins()) {
+                Optional<Plugin> reqPlugin = pluginService.getPlugin(plugin.getName());
+                if(!reqPlugin.isPresent()){
+                    return new ResponseEntity<>(new Message("Cannot create, plugin with name '" + plugin.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
 
-        return new ResponseEntity<>(resource,HttpStatus.ACCEPTED);
+        if(!reqBody.getLibraries().isEmpty()){
+            for(Library library : reqBody.getLibraries()) {
+                Optional<Library> reqLibrary = libraryService.getLibrary(library.getName());
+                if(!reqLibrary.isPresent()){
+                    return new ResponseEntity<>(new Message("Cannot create, library with name '" + library.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+
+        if(!reqBody.getPrinciples().isEmpty()){
+            for(Principle principle : reqBody.getPrinciples()) {
+                Optional<Principle> reqPrinciple = principleService.getPrinciple(principle.getName());
+                if(!reqPrinciple.isPresent()){
+                    return new ResponseEntity<>(new Message("Cannot create, principle with name '" + principle.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+
+        if(!reqBody.getFrameworks().isEmpty()){
+            for(Framework framework : reqBody.getFrameworks()) {
+                Optional<Framework> reqFramework = frameworkService.getFramework(framework.getName());
+                if(!reqFramework.isPresent()){
+                    return new ResponseEntity<>(new Message("Cannot create, framework with name '" + framework.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+
+        if(!reqBody.getLanguages().isEmpty()){
+            for(Language language : reqBody.getLanguages()) {
+                Optional<Language> reqLanguage = languageService.getLanguage(language.getName());
+                if(!reqLanguage.isPresent()){
+                    return new ResponseEntity<>(new Message("Cannot create, language with name '" + language.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+
+        Resource newResource = resourceService.createResource(reqBody);
+
+        return new ResponseEntity<>(newResource,HttpStatus.ACCEPTED);
     }
 
     // Updates resource
     @PutMapping(value = "{resourcePath}")
-    public ResponseEntity putResource(@PathVariable String resourcePath,@RequestBody ResourceCreateRequest resource) throws NotFoundException {
-        Optional<Resource> resToUpdate;
+    public ResponseEntity putResource(@PathVariable String resourcePath, @RequestBody Resource reqBody) {
+        Optional<Resource> resourceToUpdate;
         try{
             int resourceId = Integer.parseInt(resourcePath);
-            resToUpdate = resourceService.getResource(resourceId);
-        } catch(NumberFormatException nfe){
-            resToUpdate = resourceService.getResource(resourcePath);
-        }
-        if(!resToUpdate.isPresent()){
-            return new ResponseEntity<>(new Message("Cannot update, resource '" + resourcePath + "' does not exist"),HttpStatus.NOT_FOUND);
-        }
-
-
-        Resource newres = resToUpdate.get();
-        if (resource.getName() != null) {
-           newres.setName(resource.getName());
-        }
-        if(resource.getUrl() != null) {
-            newres.setUrl(resource.getUrl());
-        }
-        if(resource.getLanguageName() != null){
-            Optional<Language> newLanguage = languageService.getLanguage(resource.getLanguageName());
-            if(!newLanguage.isPresent()){
-                return new ResponseEntity<>(new Message("Cannot update, language by name '" + resource.getLanguageName() + "' does not exist"),HttpStatus.NOT_FOUND);
-            } else {
-                newres.setLanguage(newLanguage.get());
+            resourceToUpdate = resourceService.getResource(resourceId);
+            if(!resourceToUpdate.isPresent()){
+                return new ResponseEntity<>(new Message("Cannot update, resource with ID '" + resourceId + "' does not exist"), HttpStatus.NOT_FOUND);
             }
-        } else {
-            newres.setLanguage(null);
-        }
-
-        if(resource.getFrameworkName() != null){
-            Optional<Framework> newFramework = frameworkService.getFramework(resource.getFrameworkName());
-            if(!newFramework.isPresent()){
-                return new ResponseEntity<>(new Message("Cannot update, framework by name '" + resource.getFrameworkName() + "' does not exist"),HttpStatus.NOT_FOUND);
-            } else {
-                newres.setFramework(newFramework.get());
+        } catch(NumberFormatException nfe) {
+            resourceToUpdate = resourceService.getResource(resourcePath);
+            if(!resourceToUpdate.isPresent()){
+                return new ResponseEntity<>(new Message("Cannot update, resource with name '" + resourcePath + "' does not exist"), HttpStatus.NOT_FOUND);
             }
-        } else {
-            newres.setFramework(null);
         }
 
-        Resource returned = resourceService.createResource(newres);
-        return new ResponseEntity<>(returned,HttpStatus.ACCEPTED);
 
+        Resource newResource = resourceToUpdate.get();
+        if(reqBody.getName() != null) {
+            newResource.setName(reqBody.getName());
+        }
+
+        if(reqBody.getDescription() != null) {
+            newResource.setDescription(reqBody.getDescription());
+        }
+
+        if(reqBody.getUrl() != null) {
+            newResource.setUrl(reqBody.getUrl());
+        }
+
+        if(reqBody.getFilePath() != null) {
+            newResource.setFilePath(reqBody.getFilePath());
+        }
+
+        if(!reqBody.getProjects().isEmpty()) {
+            for(Project project : reqBody.getProjects()) {
+                if(!projectService.getProject(project.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, project with name '" + project.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                }
+            }
+            newResource.setProjects(reqBody.getProjects());
+        }
+
+        if(!reqBody.getTools().isEmpty()) {
+            for(Tool tool : reqBody.getTools()) {
+                if(!toolService.getTool(tool.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, tool with name '" + tool.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                }
+            }
+            newResource.setTools(reqBody.getTools());
+        }
+
+        if(!reqBody.getPlugins().isEmpty()) {
+            for(Plugin plugin : reqBody.getPlugins()) {
+                if(!pluginService.getPlugin(plugin.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, plugin with name '" + plugin.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                }
+            }
+            newResource.setPlugins(reqBody.getPlugins());
+        }
+
+        if(!reqBody.getLibraries().isEmpty()) {
+            for(Library lib : reqBody.getLibraries()) {
+                if(!libraryService.getLibrary(lib.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, library with name '" + lib.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                }
+            }
+            newResource.setLibraries(reqBody.getLibraries());
+        }
+
+        if(!reqBody.getPrinciples().isEmpty()) {
+            for(Principle principle : reqBody.getPrinciples()) {
+                if(!principleService.getPrinciple(principle.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, principle with name '" + principle.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                }
+            }
+            newResource.setPrinciples(reqBody.getPrinciples());
+        }
+
+        if(!reqBody.getLanguages().isEmpty()) {
+            for(Language language : reqBody.getLanguages()) {
+                if(!languageService.getLanguage(language.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, language with name '" + language.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                }
+            }
+            newResource.setLanguages(reqBody.getLanguages());
+        }
+
+        if(!reqBody.getFrameworks().isEmpty()) {
+            for(Framework framework : reqBody.getFrameworks()) {
+                if(!frameworkService.getFramework(framework.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, library with name '" + framework.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                }
+            }
+            newResource.setFrameworks(reqBody.getFrameworks());
+        }
+
+        Resource returnedResource = resourceService.createResource(newResource);
+        return new ResponseEntity<>(returnedResource, HttpStatus.ACCEPTED);
     }
 
     // DELs resource
     @DeleteMapping(value = "{resourcePath}")
-    public ResponseEntity delResource(@PathVariable String resourcePath){
-        Optional<Resource> testResource;
+    public ResponseEntity delResource(@PathVariable String resourcePath) {
+        Optional<Resource> prevResource;
         try{
             int resourceId = Integer.parseInt(resourcePath);
-            testResource = resourceService.getResource(resourceId);
+            prevResource = resourceService.getResource(resourceId);
 
         } catch(NumberFormatException nfe){
-            testResource = resourceService.getResource(resourcePath);
+            prevResource = resourceService.getResource(resourcePath);
         }
-        if(!testResource.isPresent()){
+        if(!prevResource.isPresent()){
             return new ResponseEntity<>(new Message("Resource '" + resourcePath + "' does not exist"),HttpStatus.NOT_FOUND);
         }
 
-        Resource toDelete = testResource.get();
-        toDelete = resourceService.destroyResource(toDelete);
-        return new ResponseEntity<>(toDelete,HttpStatus.ACCEPTED);
+        Resource resourceToDelete = prevResource.get();
+        Resource deletedResource = resourceService.destroyResource(resourceToDelete);
+        return new ResponseEntity<>(deletedResource,HttpStatus.ACCEPTED);
     }
-
 }
