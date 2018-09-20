@@ -26,12 +26,6 @@ public class LanguageController {
     @Autowired
     private LanguageService languageService;
 
-    @Autowired
-    private LibraryService libraryService;
-
-    @Autowired
-    private FrameworkService frameworkService;
-
     Gson gson;
 
     // GETs language

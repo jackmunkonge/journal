@@ -20,9 +20,6 @@ public class FrameworkController {
     @Autowired
     private FrameworkService frameworkService;
 
-    @Autowired
-    private LibraryService libraryService;
-
     Gson gson;
 
     // GETs framework
