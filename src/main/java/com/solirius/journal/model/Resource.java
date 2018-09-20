@@ -1,5 +1,6 @@
 package com.solirius.journal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
@@ -32,78 +33,14 @@ public class Resource {
 
 
     // PROJECT MODEL
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources")
-//    @JsonIgnoreProperties({"projects", "resources"})
+    @JsonIgnoreProperties({"resources"})
     private List<Project> projects = new ArrayList<>();
 
 
-    // TOOL MODEL
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "resource_tool",
-            joinColumns = { @JoinColumn(name="resource_id") },
-            inverseJoinColumns = { @JoinColumn(name="tool_id") }
-    )
-    @Column(name = "tool", nullable=true)
-//    @JsonIgnoreProperties({"projects", "resources"})
-    private List<Tool> tools = new ArrayList<>();
-
-
-    // PLUGIN MODEL
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "resource_plugin",
-            joinColumns = { @JoinColumn(name="resource_id") },
-            inverseJoinColumns = { @JoinColumn(name="plugin_id") }
-    )
-    @Column(name = "plugin", nullable=true)
-//    @JsonIgnoreProperties({"projects", "resources"})
-    private List<Plugin> plugins = new ArrayList<>();
-
-
-    // LIBRARY MODEL
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "resource_library",
-            joinColumns = { @JoinColumn(name="resource_id") },
-            inverseJoinColumns = { @JoinColumn(name="library_id") }
-    )
-    @Column(name = "library", nullable=true)
-//    @JsonIgnoreProperties({"projects", "resources"})
-    private List<Library> libraries = new ArrayList<>();
-
-
-    // PRINCIPLE MODEL
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "resource_principle",
-            joinColumns = { @JoinColumn(name="resource_id") },
-            inverseJoinColumns = { @JoinColumn(name="principle_id") }
-    )
-    @Column(name = "principle", nullable=true)
-//    @JsonIgnoreProperties({"projects", "resources"})
-    private List<Principle> principles = new ArrayList<>();
-
-
-    // LANGUAGE MODEL
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "resource_language",
-            joinColumns = { @JoinColumn(name="resource_id") },
-            inverseJoinColumns = { @JoinColumn(name="language_id") }
-    )
-    @Column(name = "language", nullable=true)
-//    @JsonIgnoreProperties({"projects", "resources"})
-    private List<Language> languages = new ArrayList<>();
-
-
     // FRAMEWORK MODEL
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "resource_framework",
@@ -111,8 +48,73 @@ public class Resource {
             inverseJoinColumns = { @JoinColumn(name="framework_id") }
     )
     @Column(name = "framework", nullable=true)
-//    @JsonIgnoreProperties({"projects", "resources"})
+    @JsonIgnoreProperties({"resources"})
     private List<Framework> frameworks = new ArrayList<>();
+
+
+    // LANGUAGE MODEL
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "resource_language",
+            joinColumns = { @JoinColumn(name="resource_id") },
+            inverseJoinColumns = { @JoinColumn(name="language_id") }
+    )
+    @Column(name = "language", nullable=true)
+    @JsonIgnoreProperties({"resources"})
+    private List<Language> languages = new ArrayList<>();
+
+
+    // LIBRARY MODEL
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "resource_library",
+            joinColumns = { @JoinColumn(name="resource_id") },
+            inverseJoinColumns = { @JoinColumn(name="library_id") }
+    )
+    @Column(name = "library", nullable=true)
+    @JsonIgnoreProperties({"resources"})
+    private List<Library> libraries = new ArrayList<>();
+
+
+    // PLUGIN MODEL
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "resource_plugin",
+            joinColumns = { @JoinColumn(name="resource_id") },
+            inverseJoinColumns = { @JoinColumn(name="plugin_id") }
+    )
+    @Column(name = "plugin", nullable=true)
+    @JsonIgnoreProperties({"resources"})
+    private List<Plugin> plugins = new ArrayList<>();
+
+
+    // PRINCIPLE MODEL
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "resource_principle",
+            joinColumns = { @JoinColumn(name="resource_id") },
+            inverseJoinColumns = { @JoinColumn(name="principle_id") }
+    )
+    @Column(name = "principle", nullable=true)
+    @JsonIgnoreProperties({"resources"})
+    private List<Principle> principles = new ArrayList<>();
+
+
+    // TOOL MODEL
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "resource_tool",
+            joinColumns = { @JoinColumn(name="resource_id") },
+            inverseJoinColumns = { @JoinColumn(name="tool_id") }
+    )
+    @Column(name = "tool", nullable=true)
+    @JsonIgnoreProperties({"resources"})
+    private List<Tool> tools = new ArrayList<>();
 
 
     // GETTERS AND SETTERS
@@ -164,36 +166,12 @@ public class Resource {
         this.projects = projects;
     }
 
-    public List<Tool> getTools() {
-        return tools;
+    public List<Framework> getFrameworks() {
+        return frameworks;
     }
 
-    public void setTools(List<Tool> tools) {
-        this.tools = tools;
-    }
-
-    public List<Plugin> getPlugins() {
-        return plugins;
-    }
-
-    public void setPlugins(List<Plugin> plugins) {
-        this.plugins = plugins;
-    }
-
-    public List<Library> getLibraries() {
-        return libraries;
-    }
-
-    public void setLibraries(List<Library> libraries) {
-        this.libraries = libraries;
-    }
-
-    public List<Principle> getPrinciples() {
-        return principles;
-    }
-
-    public void setPrinciples(List<Principle> principles) {
-        this.principles = principles;
+    public void setFrameworks(List<Framework> frameworks) {
+        this.frameworks = frameworks;
     }
 
     public List<Language> getLanguages() {
@@ -204,11 +182,35 @@ public class Resource {
         this.languages = languages;
     }
 
-    public List<Framework> getFrameworks() {
-        return frameworks;
+    public List<Library> getLibraries() {
+        return libraries;
     }
 
-    public void setFrameworks(List<Framework> frameworks) {
-        this.frameworks = frameworks;
+    public void setLibraries(List<Library> libraries) {
+        this.libraries = libraries;
+    }
+
+    public List<Plugin> getPlugins() {
+        return plugins;
+    }
+
+    public void setPlugins(List<Plugin> plugins) {
+        this.plugins = plugins;
+    }
+
+    public List<Principle> getPrinciples() {
+        return principles;
+    }
+
+    public void setPrinciples(List<Principle> principles) {
+        this.principles = principles;
+    }
+
+    public List<Tool> getTools() {
+        return tools;
+    }
+
+    public void setTools(List<Tool> tools) {
+        this.tools = tools;
     }
 }

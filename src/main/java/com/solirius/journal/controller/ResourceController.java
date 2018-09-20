@@ -2,11 +2,13 @@ package com.solirius.journal.controller;
 
 import com.solirius.journal.Service.*;
 import com.solirius.journal.model.*;
+import gherkin.deps.com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +39,8 @@ public class ResourceController {
 
     @Autowired
     private LanguageService languageService;
+
+    Gson gson;
 
     // GETs resource
     @GetMapping(value = "{resourcePath}")
@@ -77,72 +81,89 @@ public class ResourceController {
             return new ResponseEntity<>(new Message("Cannot create, resource with name '" + reqBody.getName() + "' already exists"), HttpStatus.BAD_REQUEST);
         }
 
-        if(!reqBody.getProjects().isEmpty()){
-            for(Project project : reqBody.getProjects()) {
-                Optional<Project> reqProject = projectService.getProject(project.getName());
-                if(!reqProject.isPresent()){
-                    return new ResponseEntity<>(new Message("Cannot create, project with name '" + project.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
-                }
-            }
-        }
 
-        if(!reqBody.getTools().isEmpty()){
-            for(Tool tool : reqBody.getTools()) {
-                Optional<Tool> reqTool = toolService.getTool(tool.getName());
-                if(!reqTool.isPresent()){
-                    return new ResponseEntity<>(new Message("Cannot create, tool with name '" + tool.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
-                }
-            }
-        }
-
-        if(!reqBody.getPlugins().isEmpty()){
-            for(Plugin plugin : reqBody.getPlugins()) {
-                Optional<Plugin> reqPlugin = pluginService.getPlugin(plugin.getName());
-                if(!reqPlugin.isPresent()){
-                    return new ResponseEntity<>(new Message("Cannot create, plugin with name '" + plugin.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
-                }
-            }
-        }
-
-        if(!reqBody.getLibraries().isEmpty()){
-            for(Library library : reqBody.getLibraries()) {
-                Optional<Library> reqLibrary = libraryService.getLibrary(library.getName());
-                if(!reqLibrary.isPresent()){
-                    return new ResponseEntity<>(new Message("Cannot create, library with name '" + library.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
-                }
-            }
-        }
-
-        if(!reqBody.getPrinciples().isEmpty()){
-            for(Principle principle : reqBody.getPrinciples()) {
-                Optional<Principle> reqPrinciple = principleService.getPrinciple(principle.getName());
-                if(!reqPrinciple.isPresent()){
-                    return new ResponseEntity<>(new Message("Cannot create, principle with name '" + principle.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
-                }
-            }
-        }
-
-        if(!reqBody.getFrameworks().isEmpty()){
+        if(!reqBody.getFrameworks().isEmpty()) {
+            List<Framework> frameworksToPost = new ArrayList<>();
             for(Framework framework : reqBody.getFrameworks()) {
-                Optional<Framework> reqFramework = frameworkService.getFramework(framework.getName());
-                if(!reqFramework.isPresent()){
-                    return new ResponseEntity<>(new Message("Cannot create, framework with name '" + framework.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
+                if(!frameworkService.getFramework(framework.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot create, framework with name '" + framework.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                } else {
+                    Framework frameworkToPost = frameworkService.getFramework(framework.getName()).get();
+                    frameworksToPost.add(frameworkToPost);
                 }
             }
+            reqBody.setFrameworks(frameworksToPost);
         }
 
-        if(!reqBody.getLanguages().isEmpty()){
+        if(!reqBody.getLanguages().isEmpty()) {
+            List<Language> languagesToPost = new ArrayList<>();
             for(Language language : reqBody.getLanguages()) {
-                Optional<Language> reqLanguage = languageService.getLanguage(language.getName());
-                if(!reqLanguage.isPresent()){
-                    return new ResponseEntity<>(new Message("Cannot create, language with name '" + language.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
+                if(!languageService.getLanguage(language.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot create, language with name '" + language.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                } else {
+                    Language languageToPost = languageService.getLanguage(language.getName()).get();
+                    languagesToPost.add(languageToPost);
                 }
             }
+            reqBody.setLanguages(languagesToPost);
         }
+
+        if(!reqBody.getLibraries().isEmpty()) {
+            List<Library> librariesToPost = new ArrayList<>();
+            for(Library library : reqBody.getLibraries()) {
+                if(!libraryService.getLibrary(library.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot create, library with name '" + library.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                } else {
+                    Library libraryToPost = libraryService.getLibrary(library.getName()).get();
+                    librariesToPost.add(libraryToPost);
+                }
+            }
+            reqBody.setLibraries(librariesToPost);
+        }
+
+        if(!reqBody.getPlugins().isEmpty()) {
+            List<Plugin> pluginsToPost = new ArrayList<>();
+            for(Plugin plugin : reqBody.getPlugins()) {
+                if(!pluginService.getPlugin(plugin.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot create, plugin with name '" + plugin.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                } else {
+                    Plugin pluginToPost = pluginService.getPlugin(plugin.getName()).get();
+                    pluginsToPost.add(pluginToPost);
+                }
+            }
+            reqBody.setPlugins(pluginsToPost);
+        }
+
+        if(!reqBody.getPrinciples().isEmpty()) {
+            List<Principle> principlesToPost = new ArrayList<>();
+            for(Principle principle : reqBody.getPrinciples()) {
+                if(!principleService.getPrinciple(principle.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot create, principle with name '" + principle.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                } else {
+                    Principle principleToPost = principleService.getPrinciple(principle.getName()).get();
+                    principlesToPost.add(principleToPost);
+                }
+            }
+            reqBody.setPrinciples(principlesToPost);
+        }
+
+        if(!reqBody.getTools().isEmpty()) {
+            List<Tool> toolsToPost = new ArrayList<>();
+            for(Tool tool : reqBody.getTools()) {
+                if(!toolService.getTool(tool.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot create, tool with name '" + tool.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                } else {
+                    Tool toolToPost = toolService.getTool(tool.getName()).get();
+                    toolsToPost.add(toolToPost);
+                }
+            }
+            reqBody.setTools(toolsToPost);
+        }
+
 
         Resource newResource = resourceService.createResource(reqBody);
 
-        return new ResponseEntity<>(newResource,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(newResource, HttpStatus.ACCEPTED);
     }
 
     // Updates resource
@@ -180,68 +201,85 @@ public class ResourceController {
             newResource.setFilePath(reqBody.getFilePath());
         }
 
-        if(!reqBody.getProjects().isEmpty()) {
-            for(Project project : reqBody.getProjects()) {
-                if(!projectService.getProject(project.getName()).isPresent()) {
-                    return new ResponseEntity<>(new Message("Cannot update, project with name '" + project.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
-                }
-            }
-            newResource.setProjects(reqBody.getProjects());
-        }
 
-        if(!reqBody.getTools().isEmpty()) {
-            for(Tool tool : reqBody.getTools()) {
-                if(!toolService.getTool(tool.getName()).isPresent()) {
-                    return new ResponseEntity<>(new Message("Cannot update, tool with name '" + tool.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+        if(!reqBody.getFrameworks().isEmpty()) {
+            List<Framework> frameworksToUpdate = new ArrayList<>();
+            for(Framework framework : reqBody.getFrameworks()) {
+                if(!frameworkService.getFramework(framework.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, framework with name '" + framework.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                } else {
+                    Framework frameworkToUpdate = frameworkService.getFramework(framework.getName()).get();
+                    frameworksToUpdate.add(frameworkToUpdate);
                 }
             }
-            newResource.setTools(reqBody.getTools());
-        }
-
-        if(!reqBody.getPlugins().isEmpty()) {
-            for(Plugin plugin : reqBody.getPlugins()) {
-                if(!pluginService.getPlugin(plugin.getName()).isPresent()) {
-                    return new ResponseEntity<>(new Message("Cannot update, plugin with name '" + plugin.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
-                }
-            }
-            newResource.setPlugins(reqBody.getPlugins());
-        }
-
-        if(!reqBody.getLibraries().isEmpty()) {
-            for(Library lib : reqBody.getLibraries()) {
-                if(!libraryService.getLibrary(lib.getName()).isPresent()) {
-                    return new ResponseEntity<>(new Message("Cannot update, library with name '" + lib.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
-                }
-            }
-            newResource.setLibraries(reqBody.getLibraries());
-        }
-
-        if(!reqBody.getPrinciples().isEmpty()) {
-            for(Principle principle : reqBody.getPrinciples()) {
-                if(!principleService.getPrinciple(principle.getName()).isPresent()) {
-                    return new ResponseEntity<>(new Message("Cannot update, principle with name '" + principle.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
-                }
-            }
-            newResource.setPrinciples(reqBody.getPrinciples());
+            newResource.setFrameworks(frameworksToUpdate);
         }
 
         if(!reqBody.getLanguages().isEmpty()) {
+            List<Language> languagesToUpdate = new ArrayList<>();
             for(Language language : reqBody.getLanguages()) {
                 if(!languageService.getLanguage(language.getName()).isPresent()) {
                     return new ResponseEntity<>(new Message("Cannot update, language with name '" + language.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                } else {
+                    Language languageToUpdate = languageService.getLanguage(language.getName()).get();
+                    languagesToUpdate.add(languageToUpdate);
                 }
             }
-            newResource.setLanguages(reqBody.getLanguages());
+            newResource.setLanguages(languagesToUpdate);
         }
 
-        if(!reqBody.getFrameworks().isEmpty()) {
-            for(Framework framework : reqBody.getFrameworks()) {
-                if(!frameworkService.getFramework(framework.getName()).isPresent()) {
-                    return new ResponseEntity<>(new Message("Cannot update, library with name '" + framework.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+        if(!reqBody.getLibraries().isEmpty()) {
+            List<Library> librariesToUpdate = new ArrayList<>();
+            for(Library library : reqBody.getLibraries()) {
+                if(!libraryService.getLibrary(library.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, library with name '" + library.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                } else {
+                    Library libraryToUpdate = libraryService.getLibrary(library.getName()).get();
+                    librariesToUpdate.add(libraryToUpdate);
                 }
             }
-            newResource.setFrameworks(reqBody.getFrameworks());
+            newResource.setLibraries(librariesToUpdate);
         }
+
+        if(!reqBody.getPlugins().isEmpty()) {
+            List<Plugin> pluginsToUpdate = new ArrayList<>();
+            for(Plugin plugin : reqBody.getPlugins()) {
+                if(!pluginService.getPlugin(plugin.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, plugin with name '" + plugin.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                } else {
+                    Plugin pluginToUpdate = pluginService.getPlugin(plugin.getName()).get();
+                    pluginsToUpdate.add(pluginToUpdate);
+                }
+            }
+            newResource.setPlugins(pluginsToUpdate);
+        }
+
+        if(!reqBody.getPrinciples().isEmpty()) {
+            List<Principle> principlesToUpdate = new ArrayList<>();
+            for(Principle principle : reqBody.getPrinciples()) {
+                if(!principleService.getPrinciple(principle.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, principle with name '" + principle.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                } else {
+                    Principle principleToUpdate = principleService.getPrinciple(principle.getName()).get();
+                    principlesToUpdate.add(principleToUpdate);
+                }
+            }
+            newResource.setPrinciples(principlesToUpdate);
+        }
+
+        if(!reqBody.getTools().isEmpty()) {
+            List<Tool> toolsToUpdate = new ArrayList<>();
+            for(Tool tool : reqBody.getTools()) {
+                if(!toolService.getTool(tool.getName()).isPresent()) {
+                    return new ResponseEntity<>(new Message("Cannot update, tool with name '" + tool.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+                } else {
+                    Tool toolToUpdate = toolService.getTool(tool.getName()).get();
+                    toolsToUpdate.add(toolToUpdate);
+                }
+            }
+            newResource.setTools(toolsToUpdate);
+        }
+
 
         Resource returnedResource = resourceService.createResource(newResource);
         return new ResponseEntity<>(returnedResource, HttpStatus.ACCEPTED);
@@ -263,7 +301,9 @@ public class ResourceController {
         }
 
         Resource resourceToDelete = prevResource.get();
-        Resource deletedResource = resourceService.destroyResource(resourceToDelete);
-        return new ResponseEntity<>(deletedResource,HttpStatus.ACCEPTED);
+        gson = new Gson();
+        Resource deepCopy = gson.fromJson(gson.toJson(resourceToDelete), Resource.class);
+        resourceService.destroyResource(resourceToDelete);
+        return new ResponseEntity<>(deepCopy,HttpStatus.ACCEPTED);
     }
 }

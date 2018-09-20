@@ -1,5 +1,6 @@
 package com.solirius.journal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class Project {
 
 
     // RESOURCE MODEL
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "project_resource",
@@ -37,73 +38,8 @@ public class Project {
             inverseJoinColumns = { @JoinColumn(name="resource_id") }
     )
     @Column(name = "resource", nullable=true)
-//    @JsonIgnoreProperties({"projects", "resources"})
+    @JsonIgnoreProperties({"projects"})
     private List<Resource> resources = new ArrayList<>();
-
-
-    // TOOL MODEL
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "project_tool",
-            joinColumns = { @JoinColumn(name="project_id") },
-            inverseJoinColumns = { @JoinColumn(name="tool_id") }
-    )
-    @Column(name = "tool", nullable=true)
-//    @JsonIgnoreProperties({"projects", "resources"})
-    private List<Tool> tools = new ArrayList<>();
-
-
-    // LIBRARY MODEL
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "project_library",
-            joinColumns = { @JoinColumn(name="project_id") },
-            inverseJoinColumns = { @JoinColumn(name="library_id") }
-    )
-    @Column(name = "library", nullable=true)
-//    @JsonIgnoreProperties({"projects", "resources"})
-    private List<Library> libraries = new ArrayList<>();
-
-
-    // PRINCIPLE MODEL
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "project_principle",
-            joinColumns = { @JoinColumn(name="project_id") },
-            inverseJoinColumns = { @JoinColumn(name="principle_id") }
-    )
-    @Column(name = "principle", nullable=true)
-//    @JsonIgnoreProperties({"projects", "resources"})
-    private List<Principle> principles = new ArrayList<>();
-
-
-    // LANGUAGE MODEL
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "project_language",
-            joinColumns = { @JoinColumn(name="project_id") },
-            inverseJoinColumns = { @JoinColumn(name="language_id") }
-    )
-    @Column(name = "language", nullable=true)
-//    @JsonIgnoreProperties({"projects", "resources"})
-    private List<Language> languages = new ArrayList<>();
-
-
-    // FRAMEWORK MODEL
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "project_framework",
-            joinColumns = { @JoinColumn(name="project_id") },
-            inverseJoinColumns = { @JoinColumn(name="framework_id") }
-    )
-    @Column(name = "framework", nullable=true)
-//    @JsonIgnoreProperties({"projects", "resources"})
-    private List<Framework> frameworks = new ArrayList<>();
 
 
     // GETTERS AND SETTERS
@@ -153,45 +89,5 @@ public class Project {
 
     public void setResources(List<Resource> resources) {
         this.resources = resources;
-    }
-
-    public List<Tool> getTools() {
-        return tools;
-    }
-
-    public void setTools(List<Tool> tools) {
-        this.tools = tools;
-    }
-
-    public List<Library> getLibraries() {
-        return libraries;
-    }
-
-    public void setLibraries(List<Library> libraries) {
-        this.libraries = libraries;
-    }
-
-    public List<Principle> getPrinciples() {
-        return principles;
-    }
-
-    public void setPrinciples(List<Principle> principles) {
-        this.principles = principles;
-    }
-
-    public List<Language> getLanguages() {
-        return languages;
-    }
-
-    public void setLanguages(List<Language> languages) {
-        this.languages = languages;
-    }
-
-    public List<Framework> getFrameworks() {
-        return frameworks;
-    }
-
-    public void setFrameworks(List<Framework> frameworks) {
-        this.frameworks = frameworks;
     }
 }

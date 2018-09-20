@@ -34,8 +34,7 @@ public class PrincipleService {
         return principleRepository.save(principle);
     }
 
-    public Principle destroyPrinciple(Principle principle) {
+    public void destroyPrinciple(Principle principle) {
         principleRepository.delete(principle);
-        return principle;
     }
 }

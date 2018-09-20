@@ -34,8 +34,7 @@ public class FrameworkService {
         return frameworkRepository.save(framework);
     }
 
-    public Framework destroyFramework(Framework framework) {
+    public void destroyFramework(Framework framework) {
         frameworkRepository.delete(framework);
-        return framework;
     }
 }

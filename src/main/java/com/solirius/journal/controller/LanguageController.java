@@ -6,11 +6,16 @@ import com.solirius.journal.Service.LibraryService;
 import com.solirius.journal.model.Framework;
 import com.solirius.journal.model.Language;
 import com.solirius.journal.model.Library;
+import cucumber.api.java.ro.Si;
+import gherkin.deps.com.google.gson.Gson;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +31,8 @@ public class LanguageController {
 
     @Autowired
     private FrameworkService frameworkService;
+
+    Gson gson;
 
     // GETs language
     @GetMapping(value = "{languagePath}")
@@ -66,24 +73,6 @@ public class LanguageController {
             return new ResponseEntity<>(new Message("Cannot create, language with name '" + reqBody.getName() + "' already exists"), HttpStatus.BAD_REQUEST);
         }
 
-        if(!reqBody.getLibraries().isEmpty()){
-            for(Library lib : reqBody.getLibraries()) {
-                Optional<Library> reqLib = libraryService.getLibrary(lib.getName());
-                if(!reqLib.isPresent()){
-                    return new ResponseEntity<>(new Message("Cannot create, library with name '" + lib.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
-                }
-            }
-        }
-
-        if(!reqBody.getFrameworks().isEmpty()){
-            for(Framework framework : reqBody.getFrameworks()) {
-                Optional<Framework> reqFramework = frameworkService.getFramework(framework.getName());
-                if(!reqFramework.isPresent()){
-                    return new ResponseEntity<>(new Message("Cannot create, framework with name '" + framework.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
-                }
-            }
-        }
-
         Language newLanguage = languageService.createLanguage(reqBody);
 
         return new ResponseEntity<>(newLanguage,HttpStatus.ACCEPTED);
@@ -116,24 +105,6 @@ public class LanguageController {
             newLanguage.setDescription(reqBody.getDescription());
         }
 
-//        if(!reqBody.getLibraries().isEmpty()) {
-//            for(Library lib : reqBody.getLibraries()) {
-//                if(!libraryService.getLibrary(lib.getName()).isPresent()) {
-//                    return new ResponseEntity<>(new Message("Cannot update, library with name '" + lib.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
-//                }
-//            }
-//            newLanguage.setLibraries(reqBody.getLibraries());
-//        }
-
-        if(!reqBody.getFrameworks().isEmpty()) {
-            for(Framework framework : reqBody.getFrameworks()) {
-                if(!frameworkService.getFramework(framework.getName()).isPresent()) {
-                    return new ResponseEntity<>(new Message("Cannot update, library with name '" + framework.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
-                }
-            }
-            newLanguage.setFrameworks(reqBody.getFrameworks());
-        }
-
         Language returnedLanguage = languageService.createLanguage(newLanguage);
         return new ResponseEntity<>(returnedLanguage, HttpStatus.ACCEPTED);
     }
@@ -154,7 +125,9 @@ public class LanguageController {
         }
 
         Language languageToDelete = prevLanguage.get();
-        Language deletedLanguage = languageService.destroyLanguage(languageToDelete);
-        return new ResponseEntity<>(deletedLanguage,HttpStatus.ACCEPTED);
+        gson = new Gson();
+        Language deepCopy = gson.fromJson(gson.toJson(languageToDelete), Language.class);
+        languageService.destroyLanguage(languageToDelete);
+        return new ResponseEntity<>(deepCopy, HttpStatus.ACCEPTED);
     }
 }

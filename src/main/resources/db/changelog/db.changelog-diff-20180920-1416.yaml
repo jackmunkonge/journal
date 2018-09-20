@@ -1,0 +1,322 @@
+databaseChangeLog:
+- changeSet:
+    id: 1537449401385-1
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: plugin_language
+        constraintName: FK1727vwvu9x2skhavem1yvof80
+- changeSet:
+    id: 1537449401385-2
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: tool_plugin
+        constraintName: FK4larftwe7hy1symvtenfmibwk
+- changeSet:
+    id: 1537449401385-3
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: principle_language
+        constraintName: FK4wpkhp2gtuhv56gcba2jy2dyf
+- changeSet:
+    id: 1537449401385-4
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: language_library
+        constraintName: FK4wsvx9c61lg66jvblgefqsxto
+- changeSet:
+    id: 1537449401385-5
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: language_library
+        constraintName: FK5cr4g8pi1j8lenwfhky0toqit
+- changeSet:
+    id: 1537449401385-6
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: plugin_framework
+        constraintName: FK7etq855l8odqw2gd2chygnw4g
+- changeSet:
+    id: 1537449401385-7
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: project_language
+        constraintName: FK7hrk9e3kx4gf6c2t00mvwfnng
+- changeSet:
+    id: 1537449401385-8
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: library_tool
+        constraintName: FK83cooyoqmh4n16xmc0jdfua5y
+- changeSet:
+    id: 1537449401385-9
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: plugin_framework
+        constraintName: FK84froq3r6ddvruqxwadwgtsfg
+- changeSet:
+    id: 1537449401385-10
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: principle_tool
+        constraintName: FK96l6y2fae7ayjkh2mu4qt2wqv
+- changeSet:
+    id: 1537449401385-11
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: framework_library
+        constraintName: FK96y5drhtgi3dcqak56j6bhq1k
+- changeSet:
+    id: 1537449401385-12
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: tool_framework
+        constraintName: FKb1qcyuvd3fgy2b8danx3cijhn
+- changeSet:
+    id: 1537449401385-13
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: project_tool
+        constraintName: FKccyf3tyqxys5pnrxa0xudlovx
+- changeSet:
+    id: 1537449401385-14
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: project_framework
+        constraintName: FKcjxwfg2m6f5759ugqd5n6eti2
+- changeSet:
+    id: 1537449401385-15
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: library_tool
+        constraintName: FKcwv7h7e8mrqj3mmftva7nnbt5
+- changeSet:
+    id: 1537449401385-16
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: tool_language
+        constraintName: FKf1sk9ji457nbuf3mjxare2g61
+- changeSet:
+    id: 1537449401385-17
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: project_principle
+        constraintName: FKgmto9s2xs1qub4bs4lo3kcy1o
+- changeSet:
+    id: 1537449401385-18
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: project_library
+        constraintName: FKh58s8q0cgg84argctcibaiebv
+- changeSet:
+    id: 1537449401385-19
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: language_framework
+        constraintName: FKhrojts0bp9dhwa60b1jivyhsl
+- changeSet:
+    id: 1537449401385-20
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: project_language
+        constraintName: FKj9u225we27islp3g8lg52kx3b
+- changeSet:
+    id: 1537449401385-21
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: plugin_language
+        constraintName: FKlm2ln8e5i2pm2unl466iylx49
+- changeSet:
+    id: 1537449401385-22
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: framework_library
+        constraintName: FKlu6mn2x1xiw9xjx2xgi6wy9so
+- changeSet:
+    id: 1537449401385-23
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: tool_framework
+        constraintName: FKm6vjjbwommr0ro2r0r08t6fw0
+- changeSet:
+    id: 1537449401385-24
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: project_framework
+        constraintName: FKmny2in4l5bj0p1mqy5xr064uf
+- changeSet:
+    id: 1537449401385-25
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: tool_plugin
+        constraintName: FKo61lkgvl4cdceqbrs1bysx0j
+- changeSet:
+    id: 1537449401385-26
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: tool_language
+        constraintName: FKp8ndxwwx7ikxf55j0osivfck8
+- changeSet:
+    id: 1537449401385-27
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: language_framework
+        constraintName: FKphj2yfefy32mw8lggt9tw0oyc
+- changeSet:
+    id: 1537449401385-28
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: principle_language
+        constraintName: FKplc8knf6qj3wtmg8sbwidcxdf
+- changeSet:
+    id: 1537449401385-29
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: principle_tool
+        constraintName: FKspp0lw4q34ica4uiwnrpurn0e
+- changeSet:
+    id: 1537449401385-30
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: project_tool
+        constraintName: FKt41t8mhampnib2a7rbrrtbq79
+- changeSet:
+    id: 1537449401385-31
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: project_principle
+        constraintName: FKwe69rb7iycjvjbodwmdkcu4a
+- changeSet:
+    id: 1537449401385-32
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: project_library
+        constraintName: FKy9rqhrm2jt1rhaool04eiew3
+- changeSet:
+    id: 1537449401385-33
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: framework_library
+- changeSet:
+    id: 1537449401385-34
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: language_framework
+- changeSet:
+    id: 1537449401385-35
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: language_library
+- changeSet:
+    id: 1537449401385-36
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: library_tool
+- changeSet:
+    id: 1537449401385-37
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: plugin_framework
+- changeSet:
+    id: 1537449401385-38
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: plugin_language
+- changeSet:
+    id: 1537449401385-39
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: principle_language
+- changeSet:
+    id: 1537449401385-40
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: principle_tool
+- changeSet:
+    id: 1537449401385-41
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: project_framework
+- changeSet:
+    id: 1537449401385-42
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: project_language
+- changeSet:
+    id: 1537449401385-43
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: project_library
+- changeSet:
+    id: 1537449401385-44
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: project_principle
+- changeSet:
+    id: 1537449401385-45
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: project_tool
+- changeSet:
+    id: 1537449401385-46
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: tool_framework
+- changeSet:
+    id: 1537449401385-47
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: tool_language
+- changeSet:
+    id: 1537449401385-48
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: tool_plugin
+

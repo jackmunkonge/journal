@@ -4,6 +4,7 @@ import com.solirius.journal.Service.FrameworkService;
 import com.solirius.journal.Service.LibraryService;
 import com.solirius.journal.model.Framework;
 import com.solirius.journal.model.Library;
+import gherkin.deps.com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ public class FrameworkController {
 
     @Autowired
     private LibraryService libraryService;
+
+    Gson gson;
 
     // GETs framework
     @GetMapping(value = "{frameworkPath}")
@@ -61,15 +64,6 @@ public class FrameworkController {
             return new ResponseEntity<>(new Message("Cannot create, framework with name '" + reqBody.getName() + "' already exists"), HttpStatus.BAD_REQUEST);
         }
 
-        if(!reqBody.getLibraries().isEmpty()){
-            for(Library lib : reqBody.getLibraries()) {
-                Optional<Library> reqLib = libraryService.getLibrary(lib.getName());
-                if(!reqLib.isPresent()){
-                    return new ResponseEntity<>(new Message("Cannot create, library with name '" + lib.getName() + "' does not exist"), HttpStatus.BAD_REQUEST);
-                }
-            }
-        }
-
         Framework newFramework = frameworkService.createFramework(reqBody);
 
         return new ResponseEntity<>(newFramework,HttpStatus.ACCEPTED);
@@ -102,15 +96,6 @@ public class FrameworkController {
             newFramework.setDescription(reqBody.getDescription());
         }
 
-        if(!reqBody.getLibraries().isEmpty()) {
-            for(Library lib : reqBody.getLibraries()) {
-                if(!libraryService.getLibrary(lib.getName()).isPresent()) {
-                    return new ResponseEntity<>(new Message("Cannot update, library with name '" + lib.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
-                }
-            }
-            newFramework.setLibraries(reqBody.getLibraries());
-        }
-
         Framework returnedFramework = frameworkService.createFramework(newFramework);
         return new ResponseEntity<>(returnedFramework, HttpStatus.ACCEPTED);
     }
@@ -131,7 +116,9 @@ public class FrameworkController {
         }
 
         Framework frameworkToDelete = prevFramework.get();
-        Framework deletedFramework = frameworkService.destroyFramework(frameworkToDelete);
-        return new ResponseEntity<>(deletedFramework,HttpStatus.ACCEPTED);
+        gson = new Gson();
+        Framework deepCopy = gson.fromJson(gson.toJson(frameworkToDelete), Framework.class);
+        frameworkService.destroyFramework(frameworkToDelete);
+        return new ResponseEntity<>(deepCopy,HttpStatus.ACCEPTED);
     }
 }

@@ -34,8 +34,7 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-    public Project destroyProject(Project project) {
+    public void destroyProject(Project project) {
         projectRepository.delete(project);
-        return project;
     }
 }

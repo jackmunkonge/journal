@@ -34,8 +34,7 @@ public class LanguageService {
         return languageRepository.save(language);
     }
 
-    public Language destroyLanguage(Language language) {
+    public void destroyLanguage(Language language) {
         languageRepository.delete(language);
-        return language;
     }
 }

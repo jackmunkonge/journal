@@ -34,8 +34,7 @@ public class LibraryService {
         return libraryRepository.save(library);
     }
 
-    public Library destroyLibrary(Library library) {
+    public void destroyLibrary(Library library) {
         libraryRepository.delete(library);
-        return library;
     }
 }

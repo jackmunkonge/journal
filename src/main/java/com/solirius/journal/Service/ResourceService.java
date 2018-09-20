@@ -34,8 +34,7 @@ public class ResourceService {
         return resourceRepository.save(resource);
     }
 
-    public Resource destroyResource(Resource resource) {
+    public void destroyResource(Resource resource) {
         resourceRepository.delete(resource);
-        return resource;
     }
 }

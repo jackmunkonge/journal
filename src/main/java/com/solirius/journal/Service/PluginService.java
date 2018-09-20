@@ -34,8 +34,7 @@ public class PluginService {
         return pluginRepository.save(plugin);
     }
 
-    public Plugin destroyPlugin(Plugin plugin) {
+    public void destroyPlugin(Plugin plugin) {
         pluginRepository.delete(plugin);
-        return plugin;
     }
 }

@@ -34,8 +34,7 @@ public class ToolService {
         return toolRepository.save(tool);
     }
 
-    public Tool destroyTool(Tool tool) {
+    public void destroyTool(Tool tool) {
         toolRepository.delete(tool);
-        return tool;
     }
 }
