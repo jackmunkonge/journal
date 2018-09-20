@@ -116,14 +116,14 @@ public class LanguageController {
             newLanguage.setDescription(reqBody.getDescription());
         }
 
-        if(!reqBody.getLibraries().isEmpty()) {
-            for(Library lib : reqBody.getLibraries()) {
-                if(!libraryService.getLibrary(lib.getName()).isPresent()) {
-                    return new ResponseEntity<>(new Message("Cannot update, library with name '" + lib.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
-                }
-            }
-            newLanguage.setLibraries(reqBody.getLibraries());
-        }
+//        if(!reqBody.getLibraries().isEmpty()) {
+//            for(Library lib : reqBody.getLibraries()) {
+//                if(!libraryService.getLibrary(lib.getName()).isPresent()) {
+//                    return new ResponseEntity<>(new Message("Cannot update, library with name '" + lib.getName() + "' does not exist"), HttpStatus.NOT_FOUND);
+//                }
+//            }
+//            newLanguage.setLibraries(reqBody.getLibraries());
+//        }
 
         if(!reqBody.getFrameworks().isEmpty()) {
             for(Framework framework : reqBody.getFrameworks()) {
