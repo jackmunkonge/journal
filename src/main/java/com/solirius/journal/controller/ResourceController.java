@@ -73,6 +73,132 @@ public class ResourceController {
         return new ResponseEntity<>(resources,HttpStatus.ACCEPTED);
     }
 
+    // GET resources by framework
+    @GetMapping(value = "/framework/{frameworkPath}")
+    public ResponseEntity getByFramework(@PathVariable String frameworkPath) {
+        Optional<Framework> reqFramework;
+        try{
+            int frameworkId = Integer.parseInt(frameworkPath);
+            reqFramework = frameworkService.getFramework(frameworkId);
+            if(!reqFramework.isPresent()){
+                return new ResponseEntity<>(new Message("Framework by ID '" + frameworkId + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
+        } catch(NumberFormatException nfe){
+            reqFramework = frameworkService.getFramework(frameworkPath);
+            if(!reqFramework.isPresent()){
+                return new ResponseEntity<>(new Message("Framework by name '" + frameworkPath + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
+        }
+
+        List<Resource> resourceList = reqFramework.get().getResources();
+        return new ResponseEntity<>(resourceList, HttpStatus.ACCEPTED);
+    }
+
+    // GET resources by language
+    @GetMapping(value = "/language/{languagePath}")
+    public ResponseEntity getByLanguage(@PathVariable String languagePath) {
+        Optional<Language> reqLanguage;
+        try{
+            int languageId = Integer.parseInt(languagePath);
+            reqLanguage = languageService.getLanguage(languageId);
+            if(!reqLanguage.isPresent()){
+                return new ResponseEntity<>(new Message("Language by ID '" + languageId + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
+        } catch(NumberFormatException nfe){
+            reqLanguage = languageService.getLanguage(languagePath);
+            if(!reqLanguage.isPresent()){
+                return new ResponseEntity<>(new Message("Language by name '" + languagePath + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
+        }
+
+        List<Resource> resourceList = reqLanguage.get().getResources();
+        return new ResponseEntity<>(resourceList, HttpStatus.ACCEPTED);
+    }
+
+    // GET resources by library
+    @GetMapping(value = "/library/{libraryPath}")
+    public ResponseEntity getByLibrary(@PathVariable String libraryPath) {
+        Optional<Library> reqLibrary;
+        try{
+            int libraryId = Integer.parseInt(libraryPath);
+            reqLibrary = libraryService.getLibrary(libraryId);
+            if(!reqLibrary.isPresent()){
+                return new ResponseEntity<>(new Message("Library by ID '" + libraryId + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
+        } catch(NumberFormatException nfe){
+            reqLibrary = libraryService.getLibrary(libraryPath);
+            if(!reqLibrary.isPresent()){
+                return new ResponseEntity<>(new Message("Library by name '" + libraryPath + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
+        }
+
+        List<Resource> resourceList = reqLibrary.get().getResources();
+        return new ResponseEntity<>(resourceList, HttpStatus.ACCEPTED);
+    }
+
+    // GET resources by plugin
+    @GetMapping(value = "/plugin/{pluginPath}")
+    public ResponseEntity getByPlugin(@PathVariable String pluginPath) {
+        Optional<Plugin> reqPlugin;
+        try{
+            int pluginId = Integer.parseInt(pluginPath);
+            reqPlugin = pluginService.getPlugin(pluginId);
+            if(!reqPlugin.isPresent()){
+                return new ResponseEntity<>(new Message("Plugin by ID '" + pluginId + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
+        } catch(NumberFormatException nfe){
+            reqPlugin = pluginService.getPlugin(pluginPath);
+            if(!reqPlugin.isPresent()){
+                return new ResponseEntity<>(new Message("Plugin by name '" + pluginPath + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
+        }
+
+        List<Resource> resourceList = reqPlugin.get().getResources();
+        return new ResponseEntity<>(resourceList, HttpStatus.ACCEPTED);
+    }
+
+    // GET resources by principle
+    @GetMapping(value = "/principle/{principlePath}")
+    public ResponseEntity getByPrinciple(@PathVariable String principlePath) {
+        Optional<Principle> reqPrinciple;
+        try{
+            int principleId = Integer.parseInt(principlePath);
+            reqPrinciple = principleService.getPrinciple(principleId);
+            if(!reqPrinciple.isPresent()){
+                return new ResponseEntity<>(new Message("Principle by ID '" + principleId + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
+        } catch(NumberFormatException nfe){
+            reqPrinciple = principleService.getPrinciple(principlePath);
+            if(!reqPrinciple.isPresent()){
+                return new ResponseEntity<>(new Message("Principle by name '" + principlePath + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
+        }
+
+        List<Resource> resourceList = reqPrinciple.get().getResources();
+        return new ResponseEntity<>(resourceList, HttpStatus.ACCEPTED);
+    }
+
+    // GET resources by tool
+    @GetMapping(value = "/tool/{toolPath}")
+    public ResponseEntity getByTool(@PathVariable String toolPath) {
+        Optional<Tool> reqTool;
+        try{
+            int toolId = Integer.parseInt(toolPath);
+            reqTool = toolService.getTool(toolId);
+            if(!reqTool.isPresent()){
+                return new ResponseEntity<>(new Message("Tool by ID '" + toolId + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
+        } catch(NumberFormatException nfe){
+            reqTool = toolService.getTool(toolPath);
+            if(!reqTool.isPresent()){
+                return new ResponseEntity<>(new Message("Tool by name '" + toolPath + "' does not exist"), HttpStatus.NOT_FOUND);
+            }
+        }
+
+        List<Resource> resourceList = reqTool.get().getResources();
+        return new ResponseEntity<>(resourceList, HttpStatus.ACCEPTED);
+    }
+
     // POSTs new resource
     @PostMapping
     public ResponseEntity postResource(@RequestBody Resource reqBody) {

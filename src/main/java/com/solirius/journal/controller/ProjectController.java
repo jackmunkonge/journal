@@ -1,14 +1,15 @@
 package com.solirius.journal.controller;
 
-import com.solirius.journal.Service.*;
-import com.solirius.journal.model.*;
+import com.solirius.journal.Service.ProjectService;
+import com.solirius.journal.Service.ResourceService;
+import com.solirius.journal.model.Project;
+import com.solirius.journal.model.Resource;
 import gherkin.deps.com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,24 +62,20 @@ public class ProjectController {
     public ResponseEntity getByResource(@PathVariable String resourcePath) {
         Optional<Resource> reqResource;
         try{
-            int languageId = Integer.parseInt(languagePath);
-            reqLanguage = languageService.getLanguage(languageId);
-            if(!reqLanguage.isPresent()){
-                return new ResponseEntity<>(new Message("Resources by language ID '" + languageId + "' do not exist"),HttpStatus.NOT_FOUND);
-            } else {
-                List<Resource> langResources = resourceService.getAllResources(reqLanguage.get());
-                return new ResponseEntity<>(langResources,HttpStatus.ACCEPTED);
+            int resourceId = Integer.parseInt(resourcePath);
+            reqResource = resourceService.getResource(resourceId);
+            if(!reqResource.isPresent()){
+                return new ResponseEntity<>(new Message("Resource by ID '" + resourceId + "' does not exist"), HttpStatus.NOT_FOUND);
             }
         } catch(NumberFormatException nfe){
-            reqLanguage = languageService.getLanguage(languagePath);
-            if(!reqLanguage.isPresent()){
-                System.out.println("Language not present.");
-                return new ResponseEntity<>(new Message("Resources by language name '" + languagePath + "' do not exist"),HttpStatus.NOT_FOUND);
-            } else {
-                List<Resource> langResources = resourceService.getAllResources(reqLanguage.get());
-                return new ResponseEntity<>(langResources,HttpStatus.ACCEPTED);
+            reqResource = resourceService.getResource(resourcePath);
+            if(!reqResource.isPresent()){
+                return new ResponseEntity<>(new Message("Resource by name '" + resourcePath + "' does not exist"), HttpStatus.NOT_FOUND);
             }
         }
+
+        List<Project> projectList = reqResource.get().getProjects();
+        return new ResponseEntity<>(projectList, HttpStatus.ACCEPTED);
     }
 
     // POSTs new project
