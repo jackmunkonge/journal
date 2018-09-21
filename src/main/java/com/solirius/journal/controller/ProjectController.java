@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +54,31 @@ public class ProjectController {
         }
 
         return new ResponseEntity<>(projects,HttpStatus.ACCEPTED);
+    }
+
+    // GET projects by resource
+    @GetMapping(value = "/resource/{resourcePath}")
+    public ResponseEntity getByResource(@PathVariable String resourcePath) {
+        Optional<Resource> reqResource;
+        try{
+            int languageId = Integer.parseInt(languagePath);
+            reqLanguage = languageService.getLanguage(languageId);
+            if(!reqLanguage.isPresent()){
+                return new ResponseEntity<>(new Message("Resources by language ID '" + languageId + "' do not exist"),HttpStatus.NOT_FOUND);
+            } else {
+                List<Resource> langResources = resourceService.getAllResources(reqLanguage.get());
+                return new ResponseEntity<>(langResources,HttpStatus.ACCEPTED);
+            }
+        } catch(NumberFormatException nfe){
+            reqLanguage = languageService.getLanguage(languagePath);
+            if(!reqLanguage.isPresent()){
+                System.out.println("Language not present.");
+                return new ResponseEntity<>(new Message("Resources by language name '" + languagePath + "' do not exist"),HttpStatus.NOT_FOUND);
+            } else {
+                List<Resource> langResources = resourceService.getAllResources(reqLanguage.get());
+                return new ResponseEntity<>(langResources,HttpStatus.ACCEPTED);
+            }
+        }
     }
 
     // POSTs new project
