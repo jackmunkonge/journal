@@ -17,5 +17,5 @@ public interface FrameworkRepository extends CrudRepository<Framework, Integer> 
 
     List<Framework> findAllByOrderByFrameworkIdAsc();
 
-    void deleteAllByName(String name);
+    void deleteByName(String name);
 }

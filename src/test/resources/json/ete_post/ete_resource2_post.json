@@ -1,0 +1,54 @@
+{
+  "name": "testResource2",
+  "url": "http://testresource2.com",
+  "description": "This is testResource2",
+  "filePath": "/Jack/Documents",
+  "frameworks": [
+    {
+      "name": "testFramework1"
+    },
+    {
+      "name": "testFramework2"
+    }
+  ],
+  "languages": [
+    {
+      "name": "testLanguage1"
+    },
+    {
+      "name": "testLanguage2"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "testLibrary1"
+    },
+    {
+      "name": "testLibrary2"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "testPlugin1"
+    },
+    {
+      "name": "testPlugin2"
+    }
+  ],
+  "principles": [
+    {
+      "name": "testPrinciple1"
+    },
+    {
+      "name": "testPrinciple2"
+    }
+  ],
+  "tools": [
+    {
+      "name": "testTool1"
+    },
+    {
+      "name": "testTool2"
+    }
+  ]
+}

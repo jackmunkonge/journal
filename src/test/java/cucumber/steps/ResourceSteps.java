@@ -2,7 +2,7 @@ package cucumber.steps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solirius.journal.Application;
-import com.solirius.journal.model.Resource;
+import com.solirius.journal.model.*;
 import com.solirius.journal.repository.*;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -17,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class ResourceSteps {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     final private String BASEURL = "http://localhost:8080";
     private List<Resource> savedResources;
-    private String endpoint;
+    private String endpoint = "/resources";
     private Resource expectedResource;
     private int deletedResourceId = -1;
 
@@ -43,13 +44,6 @@ public class ResourceSteps {
     private HttpHeaders header;
 
     private HttpEntity<String> noBodyRequest;
-    private HttpEntity<String> frameworkRequest;
-    private HttpEntity<String> languageRequest;
-    private HttpEntity<String> libraryRequest;
-    private HttpEntity<String> pluginRequest;
-    private HttpEntity<String> principleRequest;
-    private HttpEntity<String> resourceRequest;
-    private HttpEntity<String> toolRequest;
 
     @Autowired
     private FrameworkRepository frameworkRepository;
@@ -74,8 +68,8 @@ public class ResourceSteps {
 
 
     // Custom Methods
-    private ResponseEntity<String> httpMethod(String localEndpoint, HttpMethod method,HttpEntity<String> reqType) {
-        return restTemplate.exchange(BASEURL + localEndpoint, method, reqType,String.class);
+    private ResponseEntity<String> httpMethod(String localEndpoint, HttpMethod method, HttpEntity<String> reqType) {
+        return restTemplate.exchange(BASEURL + localEndpoint, method, reqType, String.class);
     }
 
 
@@ -90,16 +84,8 @@ public class ResourceSteps {
             header.add("Content-Type", "application/json");
         }
 
-        // Request Bodies
+        // Get Request Body
         noBodyRequest = new HttpEntity<>("", header);
-        frameworkRequest = new HttpEntity<>("ete_framework_post", header);
-        languageRequest = new HttpEntity<>("ete_language_post", header);
-        libraryRequest = new HttpEntity<>("ete_library_post", header);
-        pluginRequest = new HttpEntity<>("ete_plugin_post", header);
-        principleRequest = new HttpEntity<>("ete_principle_post", header);
-        resourceRequest = new HttpEntity<>("ete_resource_post", header);
-        toolRequest = new HttpEntity<>("ete_tool_post", header);
-
     }
 
     @After
@@ -112,13 +98,15 @@ public class ResourceSteps {
                     resourceRepository.deleteById(object.getResourceId());
                 }
             }
-            frameworkRepository.deleteAllByName("testFramework");
-            languageRepository.deleteAllByName("testLanguage");
-            libraryRepository.deleteAllByName("testLibrary");
-            pluginRepository.deleteAllByName("testPlugin");
-            principleRepository.deleteAllByName("testPrinciple");
-            toolRepository.deleteAllByName("testTool");
 
+            for(int i=1;i<=2;i++) {
+                frameworkRepository.deleteByName("testFramework" + i);
+                languageRepository.deleteByName("testLanguage" + i);
+                libraryRepository.deleteByName("testLibrary" + i);
+                pluginRepository.deleteByName("testPlugin" + i);
+                principleRepository.deleteByName("testPrinciple" + i);
+                toolRepository.deleteByName("testTool" + i);
+            }
 
         } catch(Exception e) {
             System.out.println(e);
@@ -129,23 +117,19 @@ public class ResourceSteps {
     public void testPrePosting() throws IOException {
         savedResources = new ArrayList<>();
 
-        for(int i=1;i<3;i++) {
-            response = httpMethod("/frameworks", HttpMethod.POST, frameworkRequest);
-            response = httpMethod("/languages", HttpMethod.POST, languageRequest);
-            response = httpMethod("/libraries", HttpMethod.POST, libraryRequest);
-            response = httpMethod("/plugins", HttpMethod.POST, pluginRequest);
-            response = httpMethod("/principles", HttpMethod.POST, principleRequest);
-            response = httpMethod("/tools", HttpMethod.POST, toolRequest);
+        for(int i=1;i<=2;i++) {
+            response = httpMethod("/frameworks", HttpMethod.POST, new HttpEntity<>("ete_framework" + i + "_post", header));
+            response = httpMethod("/languages", HttpMethod.POST, new HttpEntity<>("ete_language" + i + "_post", header));
+            response = httpMethod("/libraries", HttpMethod.POST, new HttpEntity<>("ete_library" + i + "_post", header));
+            response = httpMethod("/plugins", HttpMethod.POST, new HttpEntity<>("ete_plugin" + i + "_post", header));
+            response = httpMethod("/principles", HttpMethod.POST, new HttpEntity<>("ete_principle" + i + "_post", header));
+            response = httpMethod("/tools", HttpMethod.POST, new HttpEntity<>("ete_tool" + i + "_post", header));
         }
 
-        for(int i=0;i<5;i++) {
-            resExtract.setName(resExtract.getName() + i);
-            String resourceJson = JsonUtil.toJson(resExtract);
-            resRequest = new HttpEntity<>(resourceJson, header);
-            response = httpMethod("/resources",HttpMethod.POST, resourceRequest);
+        for(int i=1;i<=3;i++) {
+            response = httpMethod("/resources", HttpMethod.POST, new HttpEntity<>("ete_resource" + i + "_post", header));
             savedResources.add(JsonUtil.toObjectFromJson(response.getBody(), Resource.class));
         }
-        resExtract.setName("testResource");
     }
 
     @And("^use resource number (\\d+)$")
@@ -153,39 +137,19 @@ public class ResourceSteps {
         expectedResource = savedResources.get(resourceNum);
     }
 
-
-    // Resource Step Definitions
-    @Given("^a request for a (.*)$")
-    public void aRequestForA(String reqType) {
-        switch(reqType) {
-            case "resource":
-                endpoint = "/resources";
-                break;
-            case "framework":
-                endpoint = "/frameworks";
-                break;
-            case "language":
-                endpoint = "/languages";
-                break;
-        }
-    }
-
     @When("^an? (.*) request is made$")
     public void aGetRequestIsMade(String reqType) {
         switch (reqType) {
             case "get":
                 try {
-                    response = httpMethod(endpoint,HttpMethod.GET,noBodyRequest);
+                    response = httpMethod(endpoint, HttpMethod.GET, noBodyRequest);
                 } catch(HttpClientErrorException e) { }
                 break;
-            case "ete_post":
-                response = httpMethod(endpoint,HttpMethod.POST,resRequest);
-                break;
             case "update":
-                response = httpMethod(endpoint,HttpMethod.PUT,putResRequest);
+                response = httpMethod(endpoint, HttpMethod.PUT, new HttpEntity<>("ete_resource_put", header));
                 break;
             case "delete":
-                response = httpMethod(endpoint,HttpMethod.DELETE,noBodyRequest);
+                response = httpMethod(endpoint, HttpMethod.DELETE, noBodyRequest);
                 deletedResourceId = expectedResource.getResourceId();
                 break;
         }

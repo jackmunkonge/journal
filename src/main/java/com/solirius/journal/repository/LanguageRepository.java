@@ -14,5 +14,5 @@ public interface LanguageRepository extends CrudRepository<Language, Integer> {
 
     List<Language> findAllByOrderByLanguageIdAsc();
 
-    void deleteAllByName(String name);
+    void deleteByName(String name);
 }

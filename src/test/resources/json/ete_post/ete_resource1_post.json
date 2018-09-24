@@ -1,7 +1,7 @@
 {
-  "name": "testResource",
-  "url": "http://testresource.com",
-  "description": "This is testResource",
+  "name": "testResource1",
+  "url": "http://testresource1.com",
+  "description": "This is testResource1",
   "filePath": "/Jack/Documents",
   "frameworks": [
     {
