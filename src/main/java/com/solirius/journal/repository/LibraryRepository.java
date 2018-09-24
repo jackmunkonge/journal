@@ -13,4 +13,6 @@ public interface LibraryRepository extends CrudRepository<Library, Integer> {
     Optional<Library> findByName(String libraryName);
 
     List<Library> findAllByOrderByLibraryIdAsc();
+
+    void deleteAllByName(String name);
 }

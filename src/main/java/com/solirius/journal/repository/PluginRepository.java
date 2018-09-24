@@ -13,4 +13,6 @@ public interface PluginRepository extends CrudRepository<Plugin, Integer> {
     Optional<Plugin> findByName(String pluginName);
 
     List<Plugin> findAllByOrderByPluginIdAsc();
+
+    void deleteAllByName(String name);
 }

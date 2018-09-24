@@ -13,4 +13,6 @@ public interface ToolRepository extends CrudRepository<Tool, Integer> {
     Optional<Tool> findByName(String toolName);
 
     List<Tool> findAllByOrderByToolIdAsc();
+
+    void deleteAllByName(String name);
 }

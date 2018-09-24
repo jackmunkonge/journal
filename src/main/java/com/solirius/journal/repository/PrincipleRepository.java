@@ -13,4 +13,6 @@ public interface PrincipleRepository extends CrudRepository<Principle, Integer> 
     Optional<Principle> findByName(String principleName);
 
     List<Principle> findAllByOrderByPrincipleIdAsc();
+
+    void deleteAllByName(String name);
 }

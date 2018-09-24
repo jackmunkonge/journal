@@ -2,13 +2,8 @@ package cucumber.steps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solirius.journal.Application;
-import com.solirius.journal.controller.createrequest.FrameworkCreateRequest;
-import com.solirius.journal.controller.createrequest.LanguageCreateRequest;
-import com.solirius.journal.controller.createrequest.ResourceCreateRequest;
 import com.solirius.journal.model.Resource;
-import com.solirius.journal.repository.FrameworkRepository;
-import com.solirius.journal.repository.LanguageRepository;
-import com.solirius.journal.repository.ResourceRepository;
+import com.solirius.journal.repository.*;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -38,7 +33,7 @@ public class ResourceSteps {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     final private String BASEURL = "http://localhost:8080";
     private List<Resource> savedResources;
-    private String endpoint = "/resources";
+    private String endpoint;
     private Resource expectedResource;
     private int deletedResourceId = -1;
 
@@ -47,36 +42,39 @@ public class ResourceSteps {
     private RestTemplate restTemplate;
     private HttpHeaders header;
 
-    private String testLanguageStr;
-    private String testFrameworkStr;
-    private String testResourceStr;
-    private String putJson;
-    private String putFrame;
-
-    private HttpEntity<String> langRequest;
-    private HttpEntity<String> frameRequest;
-    private HttpEntity<String> resRequest;
     private HttpEntity<String> noBodyRequest;
-    private HttpEntity<String> putResRequest;
-
-    private ResourceCreateRequest resExtract;
-    private FrameworkCreateRequest frameExtract;
-    private LanguageCreateRequest langExtract;
-    private ResourceCreateRequest updateBodyExtract;
-
-
-    @Autowired
-    ResourceRepository resourceRepository;
+    private HttpEntity<String> frameworkRequest;
+    private HttpEntity<String> languageRequest;
+    private HttpEntity<String> libraryRequest;
+    private HttpEntity<String> pluginRequest;
+    private HttpEntity<String> principleRequest;
+    private HttpEntity<String> resourceRequest;
+    private HttpEntity<String> toolRequest;
 
     @Autowired
-    FrameworkRepository frameworkRepository;
+    private FrameworkRepository frameworkRepository;
 
     @Autowired
-    LanguageRepository languageRepository;
+    private LanguageRepository languageRepository;
+
+    @Autowired
+    private LibraryRepository libraryRepository;
+
+    @Autowired
+    private PluginRepository pluginRepository;
+
+    @Autowired
+    private PrincipleRepository principleRepository;
+
+    @Autowired
+    private ResourceRepository resourceRepository;
+
+    @Autowired
+    private ToolRepository toolRepository;
 
 
     // Custom Methods
-    private ResponseEntity<String> httpMethod(String localEndpoint, HttpMethod method,HttpEntity<String> reqType){
+    private ResponseEntity<String> httpMethod(String localEndpoint, HttpMethod method,HttpEntity<String> reqType) {
         return restTemplate.exchange(BASEURL + localEndpoint, method, reqType,String.class);
     }
 
@@ -93,54 +91,58 @@ public class ResourceSteps {
         }
 
         // Request Bodies
-        testLanguageStr = JsonUtil.getJsonInput("ete_language");
-        testFrameworkStr = JsonUtil.getJsonInput("ete_framework");
-        testResourceStr = JsonUtil.getJsonInput("ete_resource");
-        putJson = JsonUtil.getJsonInput("ete_putreq");
-
-        langRequest = new HttpEntity<>(testLanguageStr, header);
-        frameRequest = new HttpEntity<>(testFrameworkStr, header);
-        resRequest = new HttpEntity<>(testResourceStr, header);
         noBodyRequest = new HttpEntity<>("", header);
-        putResRequest = new HttpEntity<>(putJson, header);
-
-        // Json File Field-Extractions
-        resExtract = JsonUtil.toObjectFromJson(JsonUtil.getJsonInput("ete_resource"),ResourceCreateRequest.class);
-        frameExtract = JsonUtil.toObjectFromJson(JsonUtil.getJsonInput("ete_framework"),FrameworkCreateRequest.class);
-        langExtract = JsonUtil.toObjectFromJson(JsonUtil.getJsonInput("ete_language"),LanguageCreateRequest.class);
-        updateBodyExtract = JsonUtil.toObjectFromJson(JsonUtil.getJsonInput("ete_putreq"),ResourceCreateRequest.class);
+        frameworkRequest = new HttpEntity<>("ete_framework_post", header);
+        languageRequest = new HttpEntity<>("ete_language_post", header);
+        libraryRequest = new HttpEntity<>("ete_library_post", header);
+        pluginRequest = new HttpEntity<>("ete_plugin_post", header);
+        principleRequest = new HttpEntity<>("ete_principle_post", header);
+        resourceRequest = new HttpEntity<>("ete_resource_post", header);
+        toolRequest = new HttpEntity<>("ete_tool_post", header);
 
     }
 
     @After
-    public void cleanup(){
-        try{
-            for(Resource object:savedResources){
-                if (deletedResourceId == -1){
+    public void cleanup() {
+        try {
+            for(Resource object : savedResources) {
+                if(deletedResourceId == -1) {
                     resourceRepository.deleteById(object.getResourceId());
                 } else if(deletedResourceId != object.getResourceId()) {
                     resourceRepository.deleteById(object.getResourceId());
                 }
             }
+            frameworkRepository.deleteAllByName("testFramework");
+            languageRepository.deleteAllByName("testLanguage");
+            libraryRepository.deleteAllByName("testLibrary");
+            pluginRepository.deleteAllByName("testPlugin");
+            principleRepository.deleteAllByName("testPrinciple");
+            toolRepository.deleteAllByName("testTool");
 
-            frameworkRepository.deleteAll(frameworkRepository.findAllByName("testFramework"));
-            languageRepository.deleteAll(languageRepository.findAllByName("testLanguage"));
-        } catch(Exception e){
+
+        } catch(Exception e) {
             System.out.println(e);
         }
     }
 
-    @Given("^test resource objects posted$")
-    public void testResourcePosting() throws IOException {
+    @Given("^test objects posted$")
+    public void testPrePosting() throws IOException {
         savedResources = new ArrayList<>();
-        response = httpMethod("/languages",HttpMethod.POST,langRequest);
-        response = httpMethod("/frameworks",HttpMethod.POST,frameRequest);
 
-        for(int i=0;i<5;i++){
+        for(int i=1;i<3;i++) {
+            response = httpMethod("/frameworks", HttpMethod.POST, frameworkRequest);
+            response = httpMethod("/languages", HttpMethod.POST, languageRequest);
+            response = httpMethod("/libraries", HttpMethod.POST, libraryRequest);
+            response = httpMethod("/plugins", HttpMethod.POST, pluginRequest);
+            response = httpMethod("/principles", HttpMethod.POST, principleRequest);
+            response = httpMethod("/tools", HttpMethod.POST, toolRequest);
+        }
+
+        for(int i=0;i<5;i++) {
             resExtract.setName(resExtract.getName() + i);
             String resourceJson = JsonUtil.toJson(resExtract);
             resRequest = new HttpEntity<>(resourceJson, header);
-            response = httpMethod("/resources",HttpMethod.POST,resRequest);
+            response = httpMethod("/resources",HttpMethod.POST, resourceRequest);
             savedResources.add(JsonUtil.toObjectFromJson(response.getBody(), Resource.class));
         }
         resExtract.setName("testResource");
@@ -155,7 +157,7 @@ public class ResourceSteps {
     // Resource Step Definitions
     @Given("^a request for a (.*)$")
     public void aRequestForA(String reqType) {
-        switch(reqType){
+        switch(reqType) {
             case "resource":
                 endpoint = "/resources";
                 break;
@@ -170,13 +172,13 @@ public class ResourceSteps {
 
     @When("^an? (.*) request is made$")
     public void aGetRequestIsMade(String reqType) {
-        switch (reqType){
+        switch (reqType) {
             case "get":
-                try{
+                try {
                     response = httpMethod(endpoint,HttpMethod.GET,noBodyRequest);
-                } catch(HttpClientErrorException e){ }
+                } catch(HttpClientErrorException e) { }
                 break;
-            case "post":
+            case "ete_post":
                 response = httpMethod(endpoint,HttpMethod.POST,resRequest);
                 break;
             case "update":
@@ -241,7 +243,7 @@ public class ResourceSteps {
 
     @And("^search resource by (.*) ID$")
     public void searchByID(String reqType) {
-        switch (reqType){
+        switch (reqType) {
             case "resource":
                 endpoint = endpoint + "/" + expectedResource.getResourceId();
                 break;
@@ -257,7 +259,7 @@ public class ResourceSteps {
 
     @And("^search resource by (.*) name$")
     public void searchByName(String reqType) {
-        switch (reqType){
+        switch (reqType) {
             case "resource":
                 endpoint = endpoint + "/" + expectedResource.getName();
                 break;

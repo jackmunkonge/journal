@@ -1,0 +1,54 @@
+{
+  "name": "testResourceNew",
+  "url": "http://testresourcenew.com",
+  "description": "This is testResourceNew",
+  "filePath": "/Jack/Documents/New",
+  "frameworks": [
+    {
+      "name": "testFrameworkNew1"
+    },
+    {
+      "name": "testFrameworkNew2"
+    }
+  ],
+  "languages": [
+    {
+      "name": "testLanguageNew1"
+    },
+    {
+      "name": "testLanguageNew2"
+    }
+  ],
+  "libraries": [
+    {
+      "name": "testLibraryNew1"
+    },
+    {
+      "name": "testLibraryNew2"
+    }
+  ],
+  "plugins": [
+    {
+      "name": "testPluginNew1"
+    },
+    {
+      "name": "testPluginNew2"
+    }
+  ],
+  "principles": [
+    {
+      "name": "testPrincipleNew1"
+    },
+    {
+      "name": "testPrincipleNew2"
+    }
+  ],
+  "tools": [
+    {
+      "name": "testToolNew1"
+    },
+    {
+      "name": "testToolNew2"
+    }
+  ]
+}

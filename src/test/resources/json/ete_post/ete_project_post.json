@@ -1,0 +1,14 @@
+{
+  "name": "testProject",
+  "url": "http://testproject.com",
+  "description": "This is testProject",
+  "filePath": "/Jack/Documents",
+  "resources": [
+    {
+      "name": "testResource1"
+    },
+    {
+      "name": "testResource2"
+    }
+  ]
+}
