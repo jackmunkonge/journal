@@ -132,8 +132,13 @@ public class ResourceSteps {
         }
     }
 
-    @And("^use resource number (\\d+)$")
-    public void useResourceNumber(int resourceNum){
+    @And("^use (.*) number (\\d+)$")/////////////////////////////////////////////////////////WORKING HERE
+    public void useResourceNumber(String reqType, int resourceNum){
+        switch() {
+            case "":
+
+                break;
+        }
         expectedResource = savedResources.get(resourceNum);
     }
 
@@ -162,12 +167,12 @@ public class ResourceSteps {
 
     @Then("^a list of all resources are retrieved$")
     public void allResourcesRetrieved() throws IOException {
-        List<Resource> listres = MAPPER.readValue(response.getBody(),
+        List<Resource> listResources = MAPPER.readValue(response.getBody(),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Resource.class));
 
-        List<Resource> filteredList = listres.stream()
-                .filter(res -> res.getName()
-                        .contains(resExtract.getName())).collect(Collectors.toList());
+        List<Resource> filteredList = listResources.stream()
+                .filter(resource -> resource.getName()
+                        .contains(expectedResource.getName())).collect(Collectors.toList());
         assertEquals(savedResources.size(), filteredList.size());
     }
 
@@ -177,26 +182,35 @@ public class ResourceSteps {
         assertEquals(expectedResource.getResourceId(),fetchedResource.getResourceId());
     }
 
-    @Then("^a list of the language's resources are retrieved$")
-    public void allLanguageResourcesRetrieved() throws IOException {
-        List<Resource> listres = MAPPER.readValue(response.getBody(),
+    @Then("^a list of the (.*)'s resources are retrieved$")
+    public void aListOfResourcesRetrieved(String reqType) throws IOException {
+        List<Resource> listResources = MAPPER.readValue(response.getBody(),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, Resource.class));
 
-        List<Resource> filteredList = listres.stream()
-                .filter(res -> res.getLanguage().getName()
-                        .contains(langExtract.getName())).collect(Collectors.toList());
-        assertEquals(savedResources.size(), filteredList.size());
-    }
+        switch(reqType) {
+            case "framework":
+                assertTrue(expectedResource.getFrameworks().get(0), listResources.contains());
+                break;
+            case "language":
+                clazz = Language.class;
+                break;
+            case "library":
+                clazz = Library.class;
+                break;
+            case "plugin":
+                clazz = Plugin.class;
+                break;
+            case "principle":
+                clazz = Principle.class;
+                break;
+            case "tool":
+                clazz = Tool.class;
+                break;
+        }
 
-    @Then("^a list of the framework's resources are retrieved$")
-    public void allFrameworkResourcesRetrieved() throws IOException {
-        List<Resource> listres = MAPPER.readValue(response.getBody(),
-                MAPPER.getTypeFactory().constructCollectionType(List.class, Resource.class));
 
-        List<Resource> filteredList = listres.stream()
-                .filter(res -> res.getFramework().getName()
-                        .contains(frameExtract.getName())).collect(Collectors.toList());
-        assertEquals(savedResources.size(), filteredList.size());
+
+        listResources ==
     }
 
     @Then("^the url is correctly changed$")
@@ -221,17 +235,17 @@ public class ResourceSteps {
 
     }
 
-    @And("^search resource by (.*) name$")
+    @And("^search resource by (.*) name$")////////////////////////////////////////////////////////////////////WORKING HERE
     public void searchByName(String reqType) {
         switch (reqType) {
             case "resource":
                 endpoint = endpoint + "/" + expectedResource.getName();
                 break;
+            case "framework":
+                endpoint = endpoint + "/framework/" + expectedResource.getFrameworks().get(0).getName();
+                break;
             case "language":
                 endpoint = endpoint + "/language/" + expectedResource.getLanguage().getName();
-                break;
-            case "framework":
-                endpoint = endpoint + "/framework/" + expectedResource.getFramework().getName();
                 break;
         }
     }
