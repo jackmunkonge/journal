@@ -51,7 +51,6 @@ Feature: Create, view and destroy resources
     Then a list of the library's resources are retrieved
 
   Scenario: Get resources by library name
-    Given a request for a resource
     And search resource by library name
     When a get request is made
     And response code is successful
@@ -95,14 +94,14 @@ Feature: Create, view and destroy resources
 
   Scenario: Update a resource by ID
     And search resource by resource ID
-    And response code is successful
     When an update request is made
+    And response code is successful
     Then the url is correctly changed
 
   Scenario: Update a resource by name
     And search resource by resource name
-    And response code is successful
     When an update request is made
+    And response code is successful
     Then the url is correctly changed
 
   Scenario: Delete a resource by ID

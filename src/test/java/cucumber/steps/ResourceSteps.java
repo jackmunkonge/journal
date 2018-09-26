@@ -33,17 +33,31 @@ public class ResourceSteps {
     // Fields
     private static final ObjectMapper MAPPER = new ObjectMapper();
     final private String BASEURL = "http://localhost:8080";
-    private List<Resource> savedResources;
     private String endpoint = "/resources";
+
+    private List<Framework> savedFrameworks;
+    private List<Language> savedLanguages;
+    private List<Library> savedLibraries;
+    private List<Plugin> savedPlugins;
+    private List<Principle> savedPrinciples;
+    private List<Resource> savedResources;
+    private List<Tool> savedTools;
+
+    private Framework expectedFramework;
+    private Language expectedLanguage;
+    private Library expectedLibrary;
+    private Plugin expectedPlugin;
+    private Principle expectedPrinciple;
     private Resource expectedResource;
+    private Tool expectedTool;
+
+    private Resource updatedResource;
     private int deletedResourceId = -1;
 
 
     private ResponseEntity<String> response;
     private RestTemplate restTemplate;
     private HttpHeaders header;
-
-    private HttpEntity<String> noBodyRequest;
 
     @Autowired
     private FrameworkRepository frameworkRepository;
@@ -83,9 +97,6 @@ public class ResourceSteps {
         if(header.isEmpty()) {
             header.add("Content-Type", "application/json");
         }
-
-        // Get Request Body
-        noBodyRequest = new HttpEntity<>("", header);
     }
 
     @After
@@ -118,43 +129,67 @@ public class ResourceSteps {
         savedResources = new ArrayList<>();
 
         for(int i=1;i<=2;i++) {
-            response = httpMethod("/frameworks", HttpMethod.POST, new HttpEntity<>("ete_framework" + i + "_post", header));
-            response = httpMethod("/languages", HttpMethod.POST, new HttpEntity<>("ete_language" + i + "_post", header));
-            response = httpMethod("/libraries", HttpMethod.POST, new HttpEntity<>("ete_library" + i + "_post", header));
-            response = httpMethod("/plugins", HttpMethod.POST, new HttpEntity<>("ete_plugin" + i + "_post", header));
-            response = httpMethod("/principles", HttpMethod.POST, new HttpEntity<>("ete_principle" + i + "_post", header));
-            response = httpMethod("/tools", HttpMethod.POST, new HttpEntity<>("ete_tool" + i + "_post", header));
+            response = httpMethod("/frameworks", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_framework" + i + "_post"), header));
+            savedFrameworks.add(JsonUtil.toObjectFromJson(response.getBody(), Framework.class));
+            response = httpMethod("/languages", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_language" + i + "_post"), header));
+            savedLanguages.add(JsonUtil.toObjectFromJson(response.getBody(), Language.class));
+            response = httpMethod("/libraries", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_library" + i + "_post"), header));
+            savedLibraries.add(JsonUtil.toObjectFromJson(response.getBody(), Library.class));
+            response = httpMethod("/plugins", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_post/ete_plugin" + i + "_post"), header));
+            savedPlugins.add(JsonUtil.toObjectFromJson(response.getBody(), Plugin.class));
+            response = httpMethod("/principles", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_post/ete_principle" + i + "_post"), header));
+            savedPrinciples.add(JsonUtil.toObjectFromJson(response.getBody(), Principle.class));
+            response = httpMethod("/tools", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_post/ete_tool" + i + "_post"), header));
+            savedTools.add(JsonUtil.toObjectFromJson(response.getBody(), Tool.class));
         }
 
         for(int i=1;i<=3;i++) {
-            response = httpMethod("/resources", HttpMethod.POST, new HttpEntity<>("ete_resource" + i + "_post", header));
+            response = httpMethod("/resources", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_post/ete_resource" + i + "_post"), header));
             savedResources.add(JsonUtil.toObjectFromJson(response.getBody(), Resource.class));
         }
     }
 
-    @And("^use (.*) number (\\d+)$")/////////////////////////////////////////////////////////WORKING HERE
+    @And("^use (.*) number (\\d+)$")
     public void useResourceNumber(String reqType, int resourceNum){
-        switch() {
-            case "":
-
+        switch(reqType) {
+            case "framework":
+                expectedFramework = savedFrameworks.get(resourceNum);
+                break;
+            case "language":
+                expectedLanguage = savedLanguages.get(resourceNum);
+                break;
+            case "library":
+                expectedLibrary = savedLibraries.get(resourceNum);
+                break;
+            case "plugin":
+                expectedPlugin = savedPlugins.get(resourceNum);
+                break;
+            case "principle":
+                expectedPrinciple = savedPrinciples.get(resourceNum);
+                break;
+            case "resource":
+                expectedResource = savedResources.get(resourceNum);
+                break;
+            case "tool":
+                expectedTool = savedTools.get(resourceNum);
                 break;
         }
-        expectedResource = savedResources.get(resourceNum);
     }
 
     @When("^an? (.*) request is made$")
-    public void aGetRequestIsMade(String reqType) {
+    public void aGetRequestIsMade(String reqType) throws IOException {
         switch (reqType) {
             case "get":
                 try {
-                    response = httpMethod(endpoint, HttpMethod.GET, noBodyRequest);
+                    response = httpMethod(endpoint, HttpMethod.GET, new HttpEntity<>("", header));
                 } catch(HttpClientErrorException e) { }
                 break;
             case "update":
-                response = httpMethod(endpoint, HttpMethod.PUT, new HttpEntity<>("ete_resource_put", header));
+                response = httpMethod(endpoint, HttpMethod.PUT, new HttpEntity<>(JsonUtil.getJsonInput("ete_post/ete_resource_put"), header));
+                updatedResource = JsonUtil.toObjectFromJson(response.getBody(), Resource.class);
                 break;
             case "delete":
-                response = httpMethod(endpoint, HttpMethod.DELETE, noBodyRequest);
+                response = httpMethod(endpoint, HttpMethod.DELETE, new HttpEntity<>("", header));
                 deletedResourceId = expectedResource.getResourceId();
                 break;
         }
@@ -189,63 +224,82 @@ public class ResourceSteps {
 
         switch(reqType) {
             case "framework":
-                assertTrue(expectedResource.getFrameworks().get(0), listResources.contains());
+                assertEquals(expectedFramework.getResources(), listResources);
                 break;
             case "language":
-                clazz = Language.class;
+                assertEquals(expectedLanguage.getResources(), listResources);
                 break;
             case "library":
-                clazz = Library.class;
+                assertEquals(expectedLibrary.getResources(), listResources);
                 break;
             case "plugin":
-                clazz = Plugin.class;
+                assertEquals(expectedPlugin.getResources(), listResources);
                 break;
             case "principle":
-                clazz = Principle.class;
+                assertEquals(expectedPrinciple.getResources(), listResources);
                 break;
             case "tool":
-                clazz = Tool.class;
+                assertEquals(expectedTool.getResources(), listResources);
                 break;
         }
-
-
-
-        listResources ==
     }
 
     @Then("^the url is correctly changed$")
     public void updateSuccess() throws IOException {
-        Resource updatedRes = MAPPER.readValue(response.getBody(),Resource.class);
-        assertEquals(updateBodyExtract.getUrl(),updatedRes.getUrl());
+        Resource resource = MAPPER.readValue(response.getBody(), Resource.class);
+        assertEquals(updatedResource.getUrl(), resource.getUrl());
     }
 
     @And("^search resource by (.*) ID$")
     public void searchByID(String reqType) {
         switch (reqType) {
+            case "framework":
+                endpoint = endpoint + "/framework/" + expectedFramework.getFrameworkId();
+                break;
+            case "language":
+                endpoint = endpoint + "/language/" + expectedLanguage.getLanguageId();
+                break;
+            case "library":
+                endpoint = endpoint + "/library/" + expectedLibrary.getLibraryId();
+                break;
+            case "plugin":
+                endpoint = endpoint + "/plugin/" + expectedPlugin.getPluginId();
+                break;
+            case "principle":
+                endpoint = endpoint + "/principle/" + expectedPrinciple.getPrincipleId();
+                break;
             case "resource":
                 endpoint = endpoint + "/" + expectedResource.getResourceId();
                 break;
-            case "language":
-                endpoint = endpoint + "/language/" + expectedResource.getLanguage().getLanguageId();
-                break;
-            case "framework":
-                endpoint = endpoint + "/framework/" + expectedResource.getFramework().getFrameworkId();
+            case "tool":
+                endpoint = endpoint + "/tool/" + expectedTool.getToolId();
                 break;
         }
-
     }
 
-    @And("^search resource by (.*) name$")////////////////////////////////////////////////////////////////////WORKING HERE
+    @And("^search resource by (.*) name$")
     public void searchByName(String reqType) {
         switch (reqType) {
+            case "framework":
+                endpoint = endpoint + "/framework/" + expectedFramework.getName();
+                break;
+            case "language":
+                endpoint = endpoint + "/language/" + expectedLanguage.getName();
+                break;
+            case "library":
+                endpoint = endpoint + "/library/" + expectedLibrary.getName();
+                break;
+            case "plugin":
+                endpoint = endpoint + "/plugin/" + expectedPlugin.getName();
+                break;
+            case "principle":
+                endpoint = endpoint + "/principle/" + expectedPrinciple.getName();
+                break;
             case "resource":
                 endpoint = endpoint + "/" + expectedResource.getName();
                 break;
-            case "framework":
-                endpoint = endpoint + "/framework/" + expectedResource.getFrameworks().get(0).getName();
-                break;
-            case "language":
-                endpoint = endpoint + "/language/" + expectedResource.getLanguage().getName();
+            case "tool":
+                endpoint = endpoint + "/tool/" + expectedTool.getName();
                 break;
         }
     }
