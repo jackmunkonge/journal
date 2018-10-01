@@ -35,13 +35,13 @@ public class ResourceSteps {
     final private String BASEURL = "http://localhost:8080";
     private String endpoint = "/resources";
 
-    private List<Framework> savedFrameworks;
-    private List<Language> savedLanguages;
-    private List<Library> savedLibraries;
-    private List<Plugin> savedPlugins;
-    private List<Principle> savedPrinciples;
-    private List<Resource> savedResources;
-    private List<Tool> savedTools;
+    private List<Framework> savedFrameworks = new ArrayList<>();
+    private List<Language> savedLanguages = new ArrayList<>();
+    private List<Library> savedLibraries = new ArrayList<>();
+    private List<Plugin> savedPlugins = new ArrayList<>();
+    private List<Principle> savedPrinciples = new ArrayList<>();
+    private List<Resource> savedResources = new ArrayList<>();
+    private List<Tool> savedTools = new ArrayList<>();
 
     private Framework expectedFramework;
     private Language expectedLanguage;
@@ -50,6 +50,15 @@ public class ResourceSteps {
     private Principle expectedPrinciple;
     private Resource expectedResource;
     private Tool expectedTool;
+
+    private List<String> frameworkPostRequests = new ArrayList<>();
+    private List<String> languagePostRequests = new ArrayList<>();
+    private List<String> libraryPostRequests = new ArrayList<>();
+    private List<String> pluginPostRequests = new ArrayList<>();
+    private List<String> principlePostRequests = new ArrayList<>();
+    private List<String> resourcePostRequests = new ArrayList<>();
+    private String resourcePutRequest;
+    private List<String> toolPostRequests = new ArrayList<>();
 
     private Resource updatedResource;
     private int deletedResourceId = -1;
@@ -82,20 +91,36 @@ public class ResourceSteps {
 
 
     // Custom Methods
-    private ResponseEntity<String> httpMethod(String localEndpoint, HttpMethod method, HttpEntity<String> reqType) {
-        return restTemplate.exchange(BASEURL + localEndpoint, method, reqType, String.class);
+    private ResponseEntity<String> httpMethod(String localEndpoint, HttpMethod method, String reqString) {
+        return restTemplate.exchange(BASEURL + localEndpoint, method, new HttpEntity<>(reqString, header), String.class);
     }
 
 
     // Background
     @Before
     public void setup() throws IOException {
+        cleanup();
 
         // Header
         restTemplate = new RestTemplate();
         header = new HttpHeaders();
-        if(header.isEmpty()) {
-            header.add("Content-Type", "application/json");
+        header.add("Content-Type", "application/json");
+
+        // Set Request Bodies
+
+        resourcePutRequest = JsonUtil.getJsonInput("/ete_put/ete_resource_put");
+
+        for(int i=1;i<=2;i++) {
+            frameworkPostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_framework_post"+ i)));
+            languagePostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_language_post"+ i)));
+            libraryPostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_library_post"+ i)));
+            pluginPostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_plugin_post"+ i)));
+            principlePostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_principle_post"+ i)));
+            toolPostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_tool_post"+ i)));
+        }
+
+        for(int i=1;i<=3;i++) {
+            resourcePostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_resource_post"+ i)));
         }
     }
 
@@ -111,12 +136,12 @@ public class ResourceSteps {
             }
 
             for(int i=1;i<=2;i++) {
-                frameworkRepository.deleteByName("testFramework" + i);
-                languageRepository.deleteByName("testLanguage" + i);
-                libraryRepository.deleteByName("testLibrary" + i);
-                pluginRepository.deleteByName("testPlugin" + i);
-                principleRepository.deleteByName("testPrinciple" + i);
-                toolRepository.deleteByName("testTool" + i);
+                frameworkRepository.deleteByName(savedFrameworks.get(i).getName());
+                languageRepository.deleteByName(savedLanguages.get(i).getName());
+                libraryRepository.deleteByName(savedLibraries.get(i).getName());
+                pluginRepository.deleteByName(savedPlugins.get(i).getName());
+                principleRepository.deleteByName(savedPrinciples.get(i).getName());
+                toolRepository.deleteByName(savedTools.get(i).getName());
             }
 
         } catch(Exception e) {
@@ -128,23 +153,23 @@ public class ResourceSteps {
     public void testPrePosting() throws IOException {
         savedResources = new ArrayList<>();
 
-        for(int i=1;i<=2;i++) {
-            response = httpMethod("/frameworks", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_framework" + i + "_post"), header));
+        for(int i=0;i<=1;i++) {
+            response = httpMethod("/frameworks", HttpMethod.POST, frameworkPostRequests.get(i));
             savedFrameworks.add(JsonUtil.toObjectFromJson(response.getBody(), Framework.class));
-            response = httpMethod("/languages", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_language" + i + "_post"), header));
+            response = httpMethod("/languages", HttpMethod.POST, languagePostRequests.get(i));
             savedLanguages.add(JsonUtil.toObjectFromJson(response.getBody(), Language.class));
-            response = httpMethod("/libraries", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_library" + i + "_post"), header));
+            response = httpMethod("/libraries", HttpMethod.POST, libraryPostRequests.get(i));
             savedLibraries.add(JsonUtil.toObjectFromJson(response.getBody(), Library.class));
-            response = httpMethod("/plugins", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_post/ete_plugin" + i + "_post"), header));
+            response = httpMethod("/plugins", HttpMethod.POST, pluginPostRequests.get(i));
             savedPlugins.add(JsonUtil.toObjectFromJson(response.getBody(), Plugin.class));
-            response = httpMethod("/principles", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_post/ete_principle" + i + "_post"), header));
+            response = httpMethod("/principles", HttpMethod.POST, principlePostRequests.get(i));
             savedPrinciples.add(JsonUtil.toObjectFromJson(response.getBody(), Principle.class));
-            response = httpMethod("/tools", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_post/ete_tool" + i + "_post"), header));
+            response = httpMethod("/tools", HttpMethod.POST, toolPostRequests.get(i));
             savedTools.add(JsonUtil.toObjectFromJson(response.getBody(), Tool.class));
         }
 
         for(int i=1;i<=3;i++) {
-            response = httpMethod("/resources", HttpMethod.POST, new HttpEntity<>(JsonUtil.getJsonInput("ete_post/ete_resource" + i + "_post"), header));
+            response = httpMethod("/resources", HttpMethod.POST, resourcePostRequests.get(i));
             savedResources.add(JsonUtil.toObjectFromJson(response.getBody(), Resource.class));
         }
     }
@@ -181,15 +206,15 @@ public class ResourceSteps {
         switch (reqType) {
             case "get":
                 try {
-                    response = httpMethod(endpoint, HttpMethod.GET, new HttpEntity<>("", header));
+                    response = httpMethod(endpoint, HttpMethod.GET, "");
                 } catch(HttpClientErrorException e) { }
                 break;
             case "update":
-                response = httpMethod(endpoint, HttpMethod.PUT, new HttpEntity<>(JsonUtil.getJsonInput("ete_post/ete_resource_put"), header));
+                response = httpMethod(endpoint, HttpMethod.PUT, resourcePutRequest);
                 updatedResource = JsonUtil.toObjectFromJson(response.getBody(), Resource.class);
                 break;
             case "delete":
-                response = httpMethod(endpoint, HttpMethod.DELETE, new HttpEntity<>("", header));
+                response = httpMethod(endpoint, HttpMethod.DELETE, "");
                 deletedResourceId = expectedResource.getResourceId();
                 break;
         }
@@ -213,7 +238,7 @@ public class ResourceSteps {
 
     @Then("^the same resource is retrieved$")
     public void sameResource() throws IOException {
-        Resource fetchedResource = MAPPER.readValue(response.getBody(),Resource.class);
+        Resource fetchedResource = MAPPER.readValue(response.getBody(), Resource.class);
         assertEquals(expectedResource.getResourceId(),fetchedResource.getResourceId());
     }
 
