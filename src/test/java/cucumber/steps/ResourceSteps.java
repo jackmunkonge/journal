@@ -51,14 +51,14 @@ public class ResourceSteps {
     private Resource expectedResource;
     private Tool expectedTool;
 
-    private List<String> frameworkPostRequests = new ArrayList<>();
-    private List<String> languagePostRequests = new ArrayList<>();
-    private List<String> libraryPostRequests = new ArrayList<>();
-    private List<String> pluginPostRequests = new ArrayList<>();
-    private List<String> principlePostRequests = new ArrayList<>();
-    private List<String> resourcePostRequests = new ArrayList<>();
-    private String resourcePutRequest;
-    private List<String> toolPostRequests = new ArrayList<>();
+    private List<HttpEntity<String>> frameworkPostRequests = new ArrayList<>();
+    private List<HttpEntity<String>> languagePostRequests = new ArrayList<>();
+    private List<HttpEntity<String>> libraryPostRequests = new ArrayList<>();
+    private List<HttpEntity<String>> pluginPostRequests = new ArrayList<>();
+    private List<HttpEntity<String>> principlePostRequests = new ArrayList<>();
+    private List<HttpEntity<String>> resourcePostRequests = new ArrayList<>();
+    private HttpEntity<String> resourcePutRequest;
+    private List<HttpEntity<String>> toolPostRequests = new ArrayList<>();
 
     private Resource updatedResource;
     private int deletedResourceId = -1;
@@ -91,14 +91,14 @@ public class ResourceSteps {
 
 
     // Custom Methods
-    private ResponseEntity<String> httpMethod(String localEndpoint, HttpMethod method, String reqString) {
-        return restTemplate.exchange(BASEURL + localEndpoint, method, new HttpEntity<>(reqString, header), String.class);
+    private ResponseEntity<String> httpMethod(String localEndpoint, HttpMethod method, HttpEntity<String> reqString) {
+        return restTemplate.exchange(BASEURL + localEndpoint, method, reqString, String.class);
     }
 
 
     // Background
     @Before
-    public void setup() throws IOException {
+    public void setup() {
         cleanup();
 
         // Header
@@ -108,20 +108,25 @@ public class ResourceSteps {
 
         // Set Request Bodies
 
-        resourcePutRequest = JsonUtil.getJsonInput("/ete_put/ete_resource_put");
+        resourcePutRequest = new HttpEntity<>("/ete_put/ete_resource_put", header);
 
-        for(int i=1;i<=2;i++) {
-            frameworkPostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_framework_post"+ i)));
-            languagePostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_language_post"+ i)));
-            libraryPostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_library_post"+ i)));
-            pluginPostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_plugin_post"+ i)));
-            principlePostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_principle_post"+ i)));
-            toolPostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_tool_post"+ i)));
-        }
+        frameworkPostRequests.add(new HttpEntity<>("/ete_post/ete_framework_post"+ 1, header));
+        languagePostRequests.add(new HttpEntity<>("/ete_post/ete_language_post"+ 1, header));
+        libraryPostRequests.add(new HttpEntity<>("/ete_post/ete_library_post"+ 1, header));
+        pluginPostRequests.add(new HttpEntity<>("/ete_post/ete_plugin_post"+ 1, header));
+        principlePostRequests.add(new HttpEntity<>("/ete_post/ete_principle_post"+ 1, header));
+        toolPostRequests.add(new HttpEntity<>("/ete_post/ete_tool_post"+ 1, header));
 
-        for(int i=1;i<=3;i++) {
-            resourcePostRequests.add(JsonUtil.getJsonInput(("/ete_post/ete_resource_post"+ i)));
-        }
+        frameworkPostRequests.add(new HttpEntity<>("/ete_post/ete_framework_post"+ 2, header));
+        languagePostRequests.add(new HttpEntity<>("/ete_post/ete_language_post"+ 2, header));
+        libraryPostRequests.add(new HttpEntity<>("/ete_post/ete_library_post"+ 2, header));
+        pluginPostRequests.add(new HttpEntity<>("/ete_post/ete_plugin_post"+ 2, header));
+        principlePostRequests.add(new HttpEntity<>("/ete_post/ete_principle_post"+ 2, header));
+        toolPostRequests.add(new HttpEntity<>("/ete_post/ete_tool_post"+ 2, header));
+
+        resourcePostRequests.add(new HttpEntity<>("/ete_post/ete_resource_post"+ 1, header));
+        resourcePostRequests.add(new HttpEntity<>("/ete_post/ete_resource_post"+ 2, header));
+        resourcePostRequests.add(new HttpEntity<>("/ete_post/ete_resource_post"+ 3, header));
     }
 
     @After
@@ -151,8 +156,6 @@ public class ResourceSteps {
 
     @Given("^test objects posted$")
     public void testPrePosting() throws IOException {
-        savedResources = new ArrayList<>();
-
         for(int i=0;i<=1;i++) {
             response = httpMethod("/frameworks", HttpMethod.POST, frameworkPostRequests.get(i));
             savedFrameworks.add(JsonUtil.toObjectFromJson(response.getBody(), Framework.class));
@@ -206,7 +209,7 @@ public class ResourceSteps {
         switch (reqType) {
             case "get":
                 try {
-                    response = httpMethod(endpoint, HttpMethod.GET, "");
+                    response = httpMethod(endpoint, HttpMethod.GET, new HttpEntity<>("", header));
                 } catch(HttpClientErrorException e) { }
                 break;
             case "update":
@@ -214,7 +217,7 @@ public class ResourceSteps {
                 updatedResource = JsonUtil.toObjectFromJson(response.getBody(), Resource.class);
                 break;
             case "delete":
-                response = httpMethod(endpoint, HttpMethod.DELETE, "");
+                response = httpMethod(endpoint, HttpMethod.DELETE, new HttpEntity<>("", header));
                 deletedResourceId = expectedResource.getResourceId();
                 break;
         }
