@@ -91,16 +91,14 @@ public class ResourceSteps {
 
 
     // Custom Methods
-    private ResponseEntity<String> httpMethod(String localEndpoint, HttpMethod method, HttpEntity<String> reqString) {
-        return restTemplate.exchange(BASEURL + localEndpoint, method, reqString, String.class);
+    private ResponseEntity<String> httpMethod(String localEndpoint, HttpMethod method, HttpEntity<String> req) {
+        return restTemplate.exchange(BASEURL + localEndpoint, method, req, String.class);
     }
 
 
     // Background
     @Before
     public void setup() {
-        cleanup();
-
         // Header
         restTemplate = new RestTemplate();
         header = new HttpHeaders();
