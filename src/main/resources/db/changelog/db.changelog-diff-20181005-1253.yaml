@@ -1,0 +1,36 @@
+databaseChangeLog:
+- changeSet:
+    id: 1538740426263-1
+    author: jack (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: varchar(255)
+        tableName: tag
+- changeSet:
+    id: 1538740426263-2
+    author: jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_TAGNAME_COL
+        tableName: tag
+- changeSet:
+    id: 1538740426263-3
+    author: jack (generated)
+    changes:
+    - dropUniqueConstraint:
+        constraintName: uc_tagtag_name_col
+        tableName: tag
+- changeSet:
+    id: 1538740426263-4
+    author: jack (generated)
+    changes:
+    - dropColumn:
+        columnName: tag_name
+        tableName: tag
+

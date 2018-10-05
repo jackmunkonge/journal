@@ -8,21 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "language")
-public class Language {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "language_id")
-    private Integer languageId;
-
-    @Column(name = "name", unique=true, nullable=false)
-    private String name;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Column(name = "description")
-    private String description;
-
+@DiscriminatorValue(value = "language")
+public class Language extends Tag {
 
     // RESOURCE MODEL
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -30,32 +17,7 @@ public class Language {
     @JsonIgnoreProperties({"frameworks, languages, libraries, plugins, principles, tools"})
     private List<Resource> resources = new ArrayList<>();
 
-
     // GETTERS AND SETTERS
-    public Integer getLanguageId() {
-        return languageId;
-    }
-
-    public void setLanguageId(Integer languageId) {
-        this.languageId = languageId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public List<Resource> getResources() {
         return resources;
     }

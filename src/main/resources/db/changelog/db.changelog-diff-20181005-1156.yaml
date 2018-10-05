@@ -1,0 +1,276 @@
+databaseChangeLog:
+- changeSet:
+    id: 1538736977583-1
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: resource_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: tag_id
+            type: INT
+        tableName: resource_tag
+- changeSet:
+    id: 1538736977583-2
+    author: jack (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: tag_type
+            type: VARCHAR(31)
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: tagPK
+            name: tag_id
+            type: INT
+        - column:
+            name: tag_description
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: tag_name
+            type: VARCHAR(255)
+        tableName: tag
+- changeSet:
+    id: 1538736977583-3
+    author: jack (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: tag_name
+        constraintName: UC_TAGTAG_NAME_COL
+        tableName: tag
+- changeSet:
+    id: 1538736977583-4
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: tag_id
+        baseTableName: resource_tag
+        constraintName: FK992cvb2l3okq07blvia2abvnx
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: tag_id
+        referencedTableName: tag
+- changeSet:
+    id: 1538736977583-5
+    author: jack (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: resource_id
+        baseTableName: resource_tag
+        constraintName: FKo0x48k25meksy1a1b3itvns2b
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: resource_id
+        referencedTableName: resource
+- changeSet:
+    id: 1538736977583-6
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: resource_principle
+        constraintName: FK25xwwkwhj8uvd19u0qmcgiu3a
+- changeSet:
+    id: 1538736977583-7
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: resource_language
+        constraintName: FK7nndjaexbexehu8ckctkvmlg4
+- changeSet:
+    id: 1538736977583-8
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: resource_tool
+        constraintName: FK7yej2rm84wampqdp5odxcanvd
+- changeSet:
+    id: 1538736977583-9
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: resource_plugin
+        constraintName: FKb8ve1ojw5e5px0ee6crj4wbr8
+- changeSet:
+    id: 1538736977583-10
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: resource_framework
+        constraintName: FKd40xks0ir30qp2q7c2xa6848i
+- changeSet:
+    id: 1538736977583-11
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: resource_tool
+        constraintName: FKey9ubgffs9hil4dt60001rhay
+- changeSet:
+    id: 1538736977583-12
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: resource_library
+        constraintName: FKivh591xpmxg1myuewlk8ogmtq
+- changeSet:
+    id: 1538736977583-13
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: resource_framework
+        constraintName: FKj2tkaotylwl8xbtwlwdgmmscx
+- changeSet:
+    id: 1538736977583-14
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: resource_principle
+        constraintName: FKjp4clyw5mn9pvxoo7ahrqcmuy
+- changeSet:
+    id: 1538736977583-15
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: resource_library
+        constraintName: FKjsjk6fbsm18t57a16isetvf88
+- changeSet:
+    id: 1538736977583-16
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: resource_plugin
+        constraintName: FKoy26v0xyuenlrjfyhgl25pqlg
+- changeSet:
+    id: 1538736977583-17
+    author: jack (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: resource_language
+        constraintName: FKtarev9w5v3hqneeq3gqyv212q
+- changeSet:
+    id: 1538736977583-18
+    author: jack (generated)
+    changes:
+    - dropUniqueConstraint:
+        constraintName: uc_frameworkname_col
+        tableName: framework
+- changeSet:
+    id: 1538736977583-19
+    author: jack (generated)
+    changes:
+    - dropUniqueConstraint:
+        constraintName: uc_languagename_col
+        tableName: language
+- changeSet:
+    id: 1538736977583-20
+    author: jack (generated)
+    changes:
+    - dropUniqueConstraint:
+        constraintName: uc_libraryname_col
+        tableName: library
+- changeSet:
+    id: 1538736977583-21
+    author: jack (generated)
+    changes:
+    - dropUniqueConstraint:
+        constraintName: uc_pluginname_col
+        tableName: plugin
+- changeSet:
+    id: 1538736977583-22
+    author: jack (generated)
+    changes:
+    - dropUniqueConstraint:
+        constraintName: uc_principlename_col
+        tableName: principle
+- changeSet:
+    id: 1538736977583-23
+    author: jack (generated)
+    changes:
+    - dropUniqueConstraint:
+        constraintName: uc_toolname_col
+        tableName: tool
+- changeSet:
+    id: 1538736977583-24
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: framework
+- changeSet:
+    id: 1538736977583-25
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: language
+- changeSet:
+    id: 1538736977583-26
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: library
+- changeSet:
+    id: 1538736977583-27
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: plugin
+- changeSet:
+    id: 1538736977583-28
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: principle
+- changeSet:
+    id: 1538736977583-29
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: resource_framework
+- changeSet:
+    id: 1538736977583-30
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: resource_language
+- changeSet:
+    id: 1538736977583-31
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: resource_library
+- changeSet:
+    id: 1538736977583-32
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: resource_plugin
+- changeSet:
+    id: 1538736977583-33
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: resource_principle
+- changeSet:
+    id: 1538736977583-34
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: resource_tool
+- changeSet:
+    id: 1538736977583-35
+    author: jack (generated)
+    changes:
+    - dropTable:
+        tableName: tool
+

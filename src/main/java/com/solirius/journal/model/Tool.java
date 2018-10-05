@@ -8,21 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tool")
-public class Tool {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "tool_id")
-    private Integer toolId;
-
-    @Column(name = "name", unique=true, nullable=false)
-    private String name;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Column(name = "description")
-    private String description;
-
+@DiscriminatorValue(value = "tool")
+public class Tool extends Tag {
 
     // RESOURCE MODEL
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -30,32 +17,7 @@ public class Tool {
     @JsonIgnoreProperties({"frameworks, languages, libraries, plugins, principles, tools"})
     private List<Resource> resources = new ArrayList<>();
 
-
-    //GETTERS AND SETTERS
-    public Integer getToolId() {
-        return toolId;
-    }
-
-    public void setToolId(Integer toolId) {
-        this.toolId = toolId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
+    // GETTERS AND SETTERS
     public List<Resource> getResources() {
         return resources;
     }
