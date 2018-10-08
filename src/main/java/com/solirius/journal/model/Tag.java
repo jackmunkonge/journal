@@ -17,7 +17,7 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "tag_id")
-    private Integer tagId;
+    private Integer id;
 
     @Column(name = "tag_type", insertable = false, updatable = false)
     private String tagType;
@@ -27,7 +27,7 @@ public class Tag {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "tag_description")
-    private String tagDescription;
+    private String description;
 
     // RESOURCE MODEL
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -37,12 +37,12 @@ public class Tag {
 
 
     // GETTERS AND SETTERS
-    public Integer getTagId() {
-        return tagId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setTagId(Integer tagId) {
-        this.tagId = tagId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTagType() {
@@ -57,12 +57,12 @@ public class Tag {
         this.name = name;
     }
 
-    public String getTagDescription() {
-        return tagDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTagDescription(String tagDescription) {
-        this.tagDescription = tagDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<Resource> getResources() {
