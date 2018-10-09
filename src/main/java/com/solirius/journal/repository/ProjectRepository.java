@@ -12,5 +12,5 @@ public interface ProjectRepository extends CrudRepository<Project, Integer> {
 
     Optional<Project> findByName(String projectName);
 
-    List<Project> findAllByOrderByProjectIdAsc();
+    List<Project> findAllByOrderByIdAsc();
 }

@@ -14,7 +14,7 @@ public class Resource {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "resource_id")
-    private Integer resourceId;
+    private Integer id;
 
     @Column(name = "name", unique=true, nullable=false)
     private String name;
@@ -53,12 +53,12 @@ public class Resource {
 
 
     // GETTERS AND SETTERS
-    public Integer getResourceId() {
-        return resourceId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setResourceId(Integer resourceId) {
-        this.resourceId = resourceId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {

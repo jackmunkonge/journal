@@ -12,5 +12,5 @@ public interface ResourceRepository extends CrudRepository<Resource, Integer> {
 
     Optional<Resource> findByName(String resourceName);
 
-    List<Resource> findAllByOrderByResourceIdAsc();
+    List<Resource> findAllByOrderByIdAsc();
 }

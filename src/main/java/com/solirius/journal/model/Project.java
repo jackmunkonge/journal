@@ -13,7 +13,7 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "project_id")
-    private Integer projectId;
+    private Integer id;
 
     @Column(name = "name", unique=true, nullable=false)
     private String name;
@@ -43,12 +43,12 @@ public class Project {
 
 
     // GETTERS AND SETTERS
-    public Integer getProjectId() {
-        return projectId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
