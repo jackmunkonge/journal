@@ -45,7 +45,7 @@ public class FrameworkController {
     public ResponseEntity getAllFrameworks() {
         List<Framework> frameworks = frameworkService.getAllFrameworks();
         if(frameworks.isEmpty()){
-            return new ResponseEntity<>(new Message("Cannot get framework list, framework list is empty"),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new Message("Cannot get framework list, framework list is empty"), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(frameworks,HttpStatus.ACCEPTED);

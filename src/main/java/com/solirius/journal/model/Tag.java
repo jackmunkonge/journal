@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "tag")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tag_type", discriminatorType = DiscriminatorType.STRING)
-public class Tag {
+public abstract class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
