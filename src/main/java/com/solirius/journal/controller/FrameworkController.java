@@ -1,7 +1,10 @@
 package com.solirius.journal.controller;
 
 import com.solirius.journal.Service.FrameworkService;
+import com.solirius.journal.Service.TagService;
 import com.solirius.journal.model.Framework;
+import com.solirius.journal.repository.FrameworkRepository;
+import com.solirius.journal.repository.TagRepository;
 import gherkin.deps.com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,24 +18,32 @@ import java.util.Optional;
 @RequestMapping("/frameworks")
 public class FrameworkController {
 
+
+    private TagService tagService;
+
+    private FrameworkRepository frameworkRepository;
+
     @Autowired
-    private FrameworkService frameworkService;
+    public FrameworkController(TagService tagService, FrameworkRepository frameworkRepository) {
+        this.frameworkRepository = frameworkRepository;
+        this.tagService = new TagService(frameworkRepository);
+    }
 
     Gson gson;
 
     // GETs framework
     @GetMapping(value = "{frameworkPath}")
     public ResponseEntity getFramework(@PathVariable String frameworkPath) {
-        Optional<Framework> fetchedFrame;
+        Optional fetchedFrame;
         try{
             int frameworkId = Integer.parseInt(frameworkPath);
-            fetchedFrame = frameworkService.getFramework(frameworkId);
+            fetchedFrame = tagService.getTag(frameworkId);
             if(!fetchedFrame.isPresent()){
                 return new ResponseEntity<>(new Message("Framework with ID '" + frameworkId + "' does not exist"),HttpStatus.NOT_FOUND);
             }
                 return new ResponseEntity<>(fetchedFrame.get(),HttpStatus.ACCEPTED);
         } catch(NumberFormatException nfe){
-            fetchedFrame = frameworkService.getFramework(frameworkPath);
+            fetchedFrame = tagService.getTag(frameworkPath);
             if(!fetchedFrame.isPresent()){
                 return new ResponseEntity<>(new Message("Framework with name '" + frameworkPath + "' does not exist"),HttpStatus.NOT_FOUND);
             }
@@ -43,7 +54,7 @@ public class FrameworkController {
     // GETs all frameworks
     @GetMapping(value = "")
     public ResponseEntity getAllFrameworks() {
-        List<Framework> frameworks = frameworkService.getAllFrameworks();
+        List frameworks = tagService.getAllTags();
         if(frameworks.isEmpty()){
             return new ResponseEntity<>(new Message("Cannot get framework list, framework list is empty"), HttpStatus.NOT_FOUND);
         }
@@ -55,11 +66,11 @@ public class FrameworkController {
     @PostMapping
     public ResponseEntity postFramework(@RequestBody Framework reqBody) {
 
-        if(frameworkService.getFramework(reqBody.getName()).isPresent()) {
+        if(tagService.getTag(reqBody.getName()).isPresent()) {
             return new ResponseEntity<>(new Message("Cannot create, framework with name '" + reqBody.getName() + "' already exists"), HttpStatus.BAD_REQUEST);
         }
 
-        Framework newFramework = frameworkService.createFramework(reqBody);
+        Object newFramework = tagService.createTag(reqBody);
 
         return new ResponseEntity<>(newFramework,HttpStatus.ACCEPTED);
     }
@@ -70,12 +81,12 @@ public class FrameworkController {
         Optional<Framework> frameworkToUpdate;
         try{
             int frameworkId = Integer.parseInt(frameworkPath);
-            frameworkToUpdate = frameworkService.getFramework(frameworkId);
+            frameworkToUpdate = tagService.getTag(frameworkId);
             if(!frameworkToUpdate.isPresent()){
                 return new ResponseEntity<>(new Message("Cannot update, framework with ID '" + frameworkId + "' does not exist"), HttpStatus.NOT_FOUND);
             }
         } catch(NumberFormatException nfe) {
-            frameworkToUpdate = frameworkService.getFramework(frameworkPath);
+            frameworkToUpdate = tagService.getTag(frameworkPath);
             if(!frameworkToUpdate.isPresent()){
                 return new ResponseEntity<>(new Message("Cannot update, framework with name '" + frameworkPath + "' does not exist"), HttpStatus.NOT_FOUND);
             }
@@ -91,7 +102,7 @@ public class FrameworkController {
             newFramework.setDescription(reqBody.getDescription());
         }
 
-        Framework returnedFramework = frameworkService.createFramework(newFramework);
+        Object returnedFramework = tagService.createTag(newFramework);
         return new ResponseEntity<>(returnedFramework, HttpStatus.ACCEPTED);
     }
 
@@ -101,10 +112,10 @@ public class FrameworkController {
         Optional<Framework> prevFramework;
         try{
             int frameworkId = Integer.parseInt(frameworkPath);
-            prevFramework = frameworkService.getFramework(frameworkId);
+            prevFramework = tagService.getTag(frameworkId);
 
         } catch(NumberFormatException nfe){
-            prevFramework = frameworkService.getFramework(frameworkPath);
+            prevFramework = tagService.getTag(frameworkPath);
         }
         if(!prevFramework.isPresent()){
             return new ResponseEntity<>(new Message("Framework '" + frameworkPath + "' does not exist"),HttpStatus.NOT_FOUND);
@@ -113,7 +124,7 @@ public class FrameworkController {
         Framework frameworkToDelete = prevFramework.get();
         gson = new Gson();
         Framework deepCopy = gson.fromJson(gson.toJson(frameworkToDelete), Framework.class);
-        frameworkService.destroyFramework(frameworkToDelete);
+        tagService.destroyTag(frameworkToDelete);
         return new ResponseEntity<>(deepCopy,HttpStatus.ACCEPTED);
     }
 }

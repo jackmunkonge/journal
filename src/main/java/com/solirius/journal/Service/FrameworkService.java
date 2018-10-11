@@ -9,32 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class FrameworkService {
+public class FrameworkService extends TagService {
 
     private FrameworkRepository frameworkRepository;
 
     @Autowired
     public FrameworkService(FrameworkRepository frameworkRepository) {
+        super(frameworkRepository);
         this.frameworkRepository = frameworkRepository;
-    }
-
-    public Optional<Framework> getFramework(Integer frameworkId) {
-        return frameworkRepository.findById(frameworkId);
-    }
-
-    public Optional<Framework> getFramework(String frameworkName) {
-        return frameworkRepository.findByName(frameworkName);
-    }
-
-    public List<Framework> getAllFrameworks() {
-        return frameworkRepository.findAllByOrderByIdAsc();
-    }
-
-    public Framework createFramework(Framework framework) {
-        return frameworkRepository.save(framework);
-    }
-
-    public void destroyFramework(Framework framework) {
-        frameworkRepository.delete(framework);
     }
 }
