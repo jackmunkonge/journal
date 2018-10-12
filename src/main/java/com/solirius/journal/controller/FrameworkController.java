@@ -35,17 +35,17 @@ public class FrameworkController {
     @GetMapping(value = "{frameworkPath}")
     public ResponseEntity getFramework(@PathVariable String frameworkPath) {
         Optional fetchedFrame;
-        try{
+        try {
             int frameworkId = Integer.parseInt(frameworkPath);
             fetchedFrame = tagService.getTag(frameworkId);
             if(!fetchedFrame.isPresent()){
-                return new ResponseEntity<>(new Message("Framework with ID '" + frameworkId + "' does not exist"),HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new Message("Framework with ID '" + frameworkId + "' does not exist"), HttpStatus.NOT_FOUND);
             }
                 return new ResponseEntity<>(fetchedFrame.get(),HttpStatus.ACCEPTED);
         } catch(NumberFormatException nfe){
             fetchedFrame = tagService.getTag(frameworkPath);
             if(!fetchedFrame.isPresent()){
-                return new ResponseEntity<>(new Message("Framework with name '" + frameworkPath + "' does not exist"),HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new Message("Framework with name '" + frameworkPath + "' does not exist"), HttpStatus.NOT_FOUND);
             }
                 return new ResponseEntity<>(fetchedFrame.get(),HttpStatus.ACCEPTED);
         }
@@ -55,9 +55,6 @@ public class FrameworkController {
     @GetMapping(value = "")
     public ResponseEntity getAllFrameworks() {
         List frameworks = tagService.getAllTags();
-        if(frameworks.isEmpty()){
-            return new ResponseEntity<>(new Message("Cannot get framework list, framework list is empty"), HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(frameworks,HttpStatus.ACCEPTED);
     }
